@@ -102,8 +102,8 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent" style={{ borderColor: '#1976D2', borderTopColor: 'transparent' }}></div>
       </div>
     );
   }
@@ -355,21 +355,44 @@ export default function Dashboard() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-100">
+              <Card 
+                style={{ 
+                  background: 'linear-gradient(135deg, #BBDEFB 0%, #FFFFFF 100%)',
+                  border: '1px solid #90CAF9',
+                  borderRadius: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+                }}
+              >
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <TrendingUp className="w-8 h-8 text-blue-600" />
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style={{ backgroundColor: '#BBDEFB' }}
+                  >
+                    <TrendingUp className="w-8 h-8" style={{ color: '#1976D2' }} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#212121' }}>
                     Comece a usar o VoteSecure
                   </h3>
-                  <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                  <p className="mb-6 max-w-md mx-auto" style={{ color: '#757575' }}>
                     Cadastre os membros da sua organização e crie sua primeira assembleia para começar a realizar votações digitais.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Button 
                       onClick={() => navigate(createPageUrl('Membros'))}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="text-white min-h-[44px] transition-all duration-200"
+                      style={{ 
+                        backgroundColor: '#1976D2',
+                        borderRadius: '8px',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#1565C0';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#1976D2';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
                     >
                       <Users className="w-4 h-4 mr-2" />
                       Cadastrar Membros
@@ -377,6 +400,20 @@ export default function Dashboard() {
                     <Button 
                       onClick={() => navigate(createPageUrl('Assembleias'))}
                       variant="outline"
+                      className="min-h-[44px] transition-all duration-200"
+                      style={{ 
+                        borderColor: '#1976D2',
+                        color: '#1976D2',
+                        borderRadius: '8px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#BBDEFB';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
                     >
                       <CalendarDays className="w-4 h-4 mr-2" />
                       Criar Assembleia
