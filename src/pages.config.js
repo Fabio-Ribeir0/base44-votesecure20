@@ -10,6 +10,7 @@ import Usuarios from './pages/Usuarios';
 import Logs from './pages/Logs';
 import Procuracoes from './pages/Procuracoes';
 import PaymentSuccess from './pages/PaymentSuccess';
+import NotFound from './pages/NotFound';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "Logs": Logs,
     "Procuracoes": Procuracoes,
     "PaymentSuccess": PaymentSuccess,
+    "NotFound": NotFound,
 }
 
 export const pagesConfig = {
