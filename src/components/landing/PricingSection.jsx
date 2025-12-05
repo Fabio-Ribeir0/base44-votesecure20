@@ -8,8 +8,8 @@ const plans = [
   {
     id: 'basico',
     name: 'Básico',
-    price: 97,
-    priceId: 'STRIPE_BASICO_PRICE_ID',
+    price: 49.90,
+    stripePriceId: 'price_1Sa0HRQl8tMaegNcroBH6tF7',
     description: 'Para pequenas organizações',
     features: [
       'Até 50 membros',
@@ -29,8 +29,8 @@ const plans = [
   {
     id: 'padrao',
     name: 'Padrão',
-    price: 197,
-    priceId: 'STRIPE_100_PRICE_ID',
+    price: 99.90,
+    stripePriceId: 'price_1Sa0HqQl8tMaegNcgEwz3CoK',
     description: 'Para organizações em crescimento',
     popular: true,
     features: [
@@ -51,8 +51,8 @@ const plans = [
   {
     id: 'avancado',
     name: 'Avançado',
-    price: 347,
-    priceId: 'STRIPE_200_PRICE_ID',
+    price: 199.90,
+    stripePriceId: 'price_1Sa0I8Ql8tMaegNcWquv4e8Z',
     description: 'Para organizações exigentes',
     features: [
       'Até 500 membros',
@@ -69,10 +69,10 @@ const plans = [
     notIncluded: []
   },
   {
-    id: 'premium',
-    name: 'Premium',
-    price: 597,
-    priceId: 'STRIPE_500_PRICE_ID',
+    id: 'empresarial',
+    name: 'Empresarial',
+    price: 399.90,
+    stripePriceId: 'price_1Sa0ITQl8tMaegNclYHg46B8',
     description: 'Para grandes organizações',
     features: [
       'Membros ilimitados',
@@ -138,7 +138,7 @@ export default function PricingSection({ onSelectPlan, isAuthenticated }) {
                 <p className="text-sm text-gray-500 mb-4">{plan.description}</p>
                 
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">R${plan.price}</span>
+                  <span className="text-4xl font-bold text-gray-900">R${plan.price.toFixed(2).replace('.', ',')}</span>
                   <span className="text-gray-500">/mês</span>
                 </div>
 

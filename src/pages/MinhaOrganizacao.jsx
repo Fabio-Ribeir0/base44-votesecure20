@@ -12,7 +12,8 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle,
-  XCircle
+  XCircle,
+  ExternalLink
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,8 @@ export default function MinhaOrganizacao() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -178,6 +181,51 @@ export default function MinhaOrganizacao() {
   };
 
   const trialInfo = getTrialInfo();
+
+  const PLANS = [
+    { name: 'Básico', price: 49.90, features: ['50 membros', '2 assembleias/mês'] },
+    { name: 'Padrão', price: 99.90, features: ['200 membros', '5 assembleias/mês', 'WhatsApp'] },
+    { name: 'Avançado', price: 199.90, features: ['500 membros', '15 assembleias/mês', 'Voto qualificado'] },
+    { name: 'Empresarial', price: 399.90, features: ['Ilimitado', 'Todos os recursos'] }
+  ];
+
+  const handleUpgrade = async (planName) => {
+    setIsProcessingPayment(true);
+    try {
+      const response = await base44.functions.invoke('createCheckoutSession', {
+        planName,
+        tenantId: tenant.id
+      });
+      
+      if (response.data?.url) {
+        window.location.href = response.data.url;
+      } else {
+        toast.error('Erro ao iniciar pagamento');
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast.error('Erro ao processar pagamento');
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  const handleOpenPortal = async () => {
+    try {
+      const response = await base44.functions.invoke('createCustomerPortal', {
+        tenantId: tenant.id
+      });
+      
+      if (response.data?.url) {
+        window.open(response.data.url, '_blank');
+      } else {
+        toast.error('Erro ao abrir portal');
+      }
+    } catch (error) {
+      console.error('Error opening portal:', error);
+      toast.error('Erro ao abrir portal de pagamento');
+    }
+  };
 
   if (isLoading) {
     return (
@@ -382,9 +430,20 @@ export default function MinhaOrganizacao() {
                 </div>
 
                 <div className="border-t pt-6 flex flex-wrap gap-3">
-                  <Button variant="outline">
-                    Fazer Upgrade
-                  </Button>
+                  {tenant?.status === 'trialing' && (
+                    <Button 
+                      onClick={() => setShowUpgradeModal(true)}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      Ativar Plano Agora
+                    </Button>
+                  )}
+                  {tenant?.stripe_customer_id && (
+                    <Button variant="outline" onClick={handleOpenPortal}>
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Gerenciar Assinatura
+                    </Button>
+                  )}
                   {['trialing', 'active'].includes(tenant?.status) && (
                     <Button 
                       variant="outline" 
@@ -423,6 +482,51 @@ export default function MinhaOrganizacao() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Upgrade Modal */}
+      <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Escolha seu Plano</DialogTitle>
+            <DialogDescription>
+              Ative agora e continue usando todos os recursos após o trial
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid sm:grid-cols-2 gap-4 py-4">
+            {PLANS.map((plan) => (
+              <div 
+                key={plan.name}
+                className="border rounded-xl p-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer"
+                onClick={() => !isProcessingPayment && handleUpgrade(plan.name)}
+              >
+                <h3 className="font-semibold text-gray-900">{plan.name}</h3>
+                <p className="text-2xl font-bold text-blue-600 my-2">
+                  R${plan.price.toFixed(2).replace('.', ',')}
+                  <span className="text-sm font-normal text-gray-500">/mês</span>
+                </p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {plan.features.map((f, i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <CheckCircle className="w-3 h-3 text-green-500" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700"
+                  disabled={isProcessingPayment}
+                >
+                  {isProcessingPayment ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    'Selecionar'
+                  )}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
