@@ -641,6 +641,8 @@ export default function AssembleiaDetalhes() {
         votacao={editingVotacao}
         assembleiaId={assembleia?.id}
         userId={user?.id}
+        tenantId={tenant?.id}
+        user={user}
         onSuccess={() => {
           setShowVotacaoModal(false);
           setEditingVotacao(null);

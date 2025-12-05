@@ -20,8 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus, X, Loader2 } from "lucide-react";
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
-export default function VotacaoFormModal({ open, onOpenChange, votacao, assembleiaId, userId, onSuccess }) {
+export default function VotacaoFormModal({ open, onOpenChange, votacao, assembleiaId, userId, onSuccess, tenantId, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     titulo: '',
@@ -124,9 +125,25 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
       if (votacao) {
         await base44.entities.Votacao.update(votacao.id, data);
         toast.success('Votação atualizada!');
+        
+        // Log audit
+        if (tenantId && user) {
+          AuditLogger.logUpdate('Votacao', votacao.id,
+            `Votação "${data.titulo}" atualizada`,
+            tenantId, user
+          );
+        }
       } else {
-        await base44.entities.Votacao.create(data);
+        const newVotacao = await base44.entities.Votacao.create(data);
         toast.success('Votação criada!');
+        
+        // Log audit
+        if (tenantId && user) {
+          AuditLogger.logCreate('Votacao', newVotacao.id,
+            `Votação "${data.titulo}" criada`,
+            tenantId, user
+          );
+        }
       }
       onSuccess?.();
     } catch (error) {
