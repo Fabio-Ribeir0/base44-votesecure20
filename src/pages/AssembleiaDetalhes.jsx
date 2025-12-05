@@ -50,6 +50,9 @@ import { ptBR } from 'date-fns/locale';
 import QRCode from 'react-qr-code';
 import Sidebar from '@/components/dashboard/Sidebar';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import VotacaoFormModal from '@/components/votacao/VotacaoFormModal';
+import VotarModal from '@/components/votacao/VotarModal';
+import VotacaoResultados from '@/components/votacao/VotacaoResultados';
 
 export default function AssembleiaDetalhes() {
   const navigate = useNavigate();
@@ -65,6 +68,10 @@ export default function AssembleiaDetalhes() {
   const [showQRModal, setShowQRModal] = useState(false);
   const [showCheckinModal, setShowCheckinModal] = useState(false);
   const [selectedMembro, setSelectedMembro] = useState('');
+  const [showVotacaoModal, setShowVotacaoModal] = useState(false);
+  const [editingVotacao, setEditingVotacao] = useState(null);
+  const [votandoEm, setVotandoEm] = useState(null);
+  const [myMembro, setMyMembro] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -115,6 +122,13 @@ export default function AssembleiaDetalhes() {
       // Load membros
       const membrosData = await base44.entities.Membro.filter({ tenant_id: tenants[0].id, ativo: true });
       setMembros(membrosData);
+
+      // Find current user's membro record
+      const userMembro = membrosData.find(m => 
+        m.email === userData.email || 
+        m.nome_completo?.toLowerCase() === userData.full_name?.toLowerCase()
+      );
+      setMyMembro(userMembro);
 
       // Load checkins
       const checkinsData = await base44.entities.CheckIn.filter({ assembleia_id: assembleiaId });
@@ -193,6 +207,23 @@ export default function AssembleiaDetalhes() {
       'Cancelada': 'bg-red-100 text-red-700'
     };
     return <Badge className={config[status] || config['Agendada']}>{status}</Badge>;
+  };
+
+  const handleVotacaoStatusChange = async (votacao, newStatus) => {
+    try {
+      const updateData = { status: newStatus };
+      if (newStatus === 'Aberta') {
+        updateData.data_abertura = new Date().toISOString();
+      } else if (newStatus === 'Encerrada') {
+        updateData.data_encerramento = new Date().toISOString();
+      }
+      await base44.entities.Votacao.update(votacao.id, updateData);
+      toast.success(`Votação ${newStatus === 'Aberta' ? 'aberta' : 'encerrada'}!`);
+      loadData();
+    } catch (error) {
+      console.error('Error updating votacao:', error);
+      toast.error('Erro ao atualizar votação');
+    }
   };
 
   if (isLoading) {
@@ -386,10 +417,12 @@ export default function AssembleiaDetalhes() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle>Votações</CardTitle>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Nova Votação
-                  </Button>
+                  {['Agendada', 'Em andamento'].includes(assembleia.status) && (
+                    <Button onClick={() => setShowVotacaoModal(true)} className="bg-blue-600 hover:bg-blue-700">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Nova Votação
+                    </Button>
+                  )}
                 </CardHeader>
                 <CardContent>
                   {votacoes.length === 0 ? (
@@ -400,14 +433,54 @@ export default function AssembleiaDetalhes() {
                   ) : (
                     <div className="space-y-4">
                       {votacoes.map(votacao => (
-                        <Card key={votacao.id}>
+                        <Card key={votacao.id} className="hover:shadow-md transition-shadow">
                           <CardContent className="p-4">
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <h4 className="font-medium">{votacao.titulo}</h4>
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-semibold text-gray-900">{votacao.titulo}</h4>
+                                  <Badge className={
+                                    votacao.status === 'Aberta' ? 'bg-green-100 text-green-700' :
+                                    votacao.status === 'Encerrada' ? 'bg-gray-100 text-gray-700' :
+                                    'bg-blue-100 text-blue-700'
+                                  }>
+                                    {votacao.status}
+                                  </Badge>
+                                </div>
                                 <p className="text-sm text-gray-500">{votacao.tipo_voto}</p>
+                                {votacao.descricao && (
+                                  <p className="text-sm text-gray-600 mt-1">{votacao.descricao}</p>
+                                )}
                               </div>
-                              <Badge>{votacao.status}</Badge>
+                              <div className="flex gap-2">
+                                {votacao.status === 'Aberta' && myMembro && (
+                                  <Button 
+                                    onClick={() => setVotandoEm(votacao)}
+                                    className="bg-blue-600 hover:bg-blue-700"
+                                  >
+                                    <Vote className="w-4 h-4 mr-2" />
+                                    Votar
+                                  </Button>
+                                )}
+                                {votacao.status === 'Pendente' && (
+                                  <Button 
+                                    variant="outline"
+                                    onClick={() => handleVotacaoStatusChange(votacao, 'Aberta')}
+                                  >
+                                    <Play className="w-4 h-4 mr-2" />
+                                    Abrir
+                                  </Button>
+                                )}
+                                {votacao.status === 'Aberta' && (
+                                  <Button 
+                                    variant="outline"
+                                    onClick={() => handleVotacaoStatusChange(votacao, 'Encerrada')}
+                                  >
+                                    <Square className="w-4 h-4 mr-2" />
+                                    Encerrar
+                                  </Button>
+                                )}
+                              </div>
                             </div>
                           </CardContent>
                         </Card>
@@ -416,6 +489,16 @@ export default function AssembleiaDetalhes() {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Show results for closed votacoes */}
+              {votacoes.filter(v => v.status === 'Encerrada').length > 0 && (
+                <div className="mt-6 space-y-4">
+                  <h3 className="text-lg font-semibold">Resultados</h3>
+                  {votacoes.filter(v => v.status === 'Encerrada').map(votacao => (
+                    <VotacaoResultados key={votacao.id} votacao={votacao} membros={membros} />
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="detalhes">
@@ -524,6 +607,38 @@ export default function AssembleiaDetalhes() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Votacao Form Modal */}
+      <VotacaoFormModal
+        open={showVotacaoModal || !!editingVotacao}
+        onOpenChange={(open) => {
+          if (!open) {
+            setShowVotacaoModal(false);
+            setEditingVotacao(null);
+          }
+        }}
+        votacao={editingVotacao}
+        assembleiaId={assembleia?.id}
+        userId={user?.id}
+        onSuccess={() => {
+          setShowVotacaoModal(false);
+          setEditingVotacao(null);
+          loadData();
+        }}
+      />
+
+      {/* Votar Modal */}
+      <VotarModal
+        open={!!votandoEm}
+        onOpenChange={(open) => { if (!open) setVotandoEm(null); }}
+        votacao={votandoEm}
+        membroId={myMembro?.id}
+        pesoVoto={myMembro?.peso_voto || 1}
+        onSuccess={() => {
+          setVotandoEm(null);
+          loadData();
+        }}
+      />
     </div>
   );
 }
