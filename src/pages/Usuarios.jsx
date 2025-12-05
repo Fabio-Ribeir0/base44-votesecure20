@@ -7,7 +7,8 @@ import {
   UserCog, 
   Search, 
   Mail,
-  Shield
+  Shield,
+  UserPlus
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/table";
 import Sidebar from '@/components/dashboard/Sidebar';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import ConviteUsuarioModal from '@/components/usuarios/ConviteUsuarioModal';
 
 const PERFIS = ['Administrador', 'Presidente', 'Secretário', 'Observador', 'Membro Votante'];
 
@@ -41,6 +43,7 @@ export default function Usuarios() {
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showConviteModal, setShowConviteModal] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -135,9 +138,15 @@ export default function Usuarios() {
         <DashboardHeader user={user} tenant={tenant} />
         
         <main className="p-4 lg:p-6">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Usuários e Permissões</h1>
-            <p className="text-gray-600">Gerencie os usuários e seus perfis de acesso</p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Usuários e Permissões</h1>
+              <p className="text-gray-600">Gerencie os usuários e seus perfis de acesso</p>
+            </div>
+            <Button onClick={() => setShowConviteModal(true)} className="bg-blue-600 hover:bg-blue-700">
+              <UserPlus className="w-4 h-4 mr-2" />
+              Convidar Usuário
+            </Button>
           </div>
 
           {/* Search */}
@@ -236,8 +245,16 @@ export default function Usuarios() {
           <div className="mt-4 text-sm text-gray-500">
             Total: {filteredUsuarios.length} usuários
           </div>
-        </main>
-      </div>
-    </div>
-  );
-}
+          </main>
+          </div>
+
+          <ConviteUsuarioModal
+          open={showConviteModal}
+          onOpenChange={setShowConviteModal}
+          tenantId={tenant?.id}
+          tenantNome={tenant?.nome}
+          onSuccess={loadData}
+          />
+          </div>
+          );
+          }
