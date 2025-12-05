@@ -161,7 +161,7 @@ export default function Procuracoes() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#F5F5F5' }}>
       <Sidebar 
         user={user} 
         tenant={tenant} 
