@@ -53,6 +53,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import VotacaoFormModal from '@/components/votacao/VotacaoFormModal';
 import VotarModal from '@/components/votacao/VotarModal';
 import VotacaoResultados from '@/components/votacao/VotacaoResultados';
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
 export default function AssembleiaDetalhes() {
   const navigate = useNavigate();
@@ -155,6 +156,12 @@ export default function AssembleiaDetalhes() {
       await base44.entities.Assembleia.update(assembleia.id, { status: newStatus });
       setAssembleia({ ...assembleia, status: newStatus });
       toast.success(`Assembleia ${newStatus === 'Em andamento' ? 'iniciada' : 'encerrada'}`);
+      
+      // Log audit
+      AuditLogger.logUpdate('Assembleia', assembleia.id, 
+        `Assembleia "${assembleia.nome}" ${newStatus === 'Em andamento' ? 'iniciada' : 'encerrada'}`,
+        tenant.id, user
+      );
     } catch (error) {
       console.error('Error updating status:', error);
       toast.error('Erro ao atualizar status');
@@ -179,6 +186,13 @@ export default function AssembleiaDetalhes() {
         metodo: 'Manual',
         realizado_por: user.id
       });
+
+      // Log audit
+      const membroSelecionado = membros.find(m => m.id === selectedMembro);
+      AuditLogger.logCheckin(assembleia.id, 
+        `Check-in manual de "${membroSelecionado?.nome_completo}" na assembleia "${assembleia.nome}"`,
+        tenant.id, user
+      );
 
       toast.success('Check-in realizado com sucesso!');
       setShowCheckinModal(false);
@@ -219,6 +233,13 @@ export default function AssembleiaDetalhes() {
       }
       await base44.entities.Votacao.update(votacao.id, updateData);
       toast.success(`Votação ${newStatus === 'Aberta' ? 'aberta' : 'encerrada'}!`);
+      
+      // Log audit
+      AuditLogger.logUpdate('Votacao', votacao.id,
+        `Votação "${votacao.titulo}" ${newStatus === 'Aberta' ? 'aberta' : 'encerrada'}`,
+        tenant.id, user
+      );
+      
       loadData();
     } catch (error) {
       console.error('Error updating votacao:', error);
