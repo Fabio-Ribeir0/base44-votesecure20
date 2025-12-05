@@ -91,7 +91,7 @@ const plans = [
 
 export default function PricingSection({ onSelectPlan, isAuthenticated }) {
   return (
-    <section className="py-20 bg-gray-50" id="planos">
+    <section className="py-20" id="planos" style={{ backgroundColor: '#F5F5F5' }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.div
@@ -100,15 +100,15 @@ export default function PricingSection({ onSelectPlan, isAuthenticated }) {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Badge className="bg-blue-100 text-blue-700 mb-4">
+            <Badge className="mb-4" style={{ backgroundColor: '#BBDEFB', color: '#1976D2' }}>
               <Zap className="w-3 h-3 mr-1" />
               10 dias grátis em todos os planos
             </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#212121' }}>
               Escolha o plano ideal para sua
-              <span className="text-blue-600"> organização</span>
+              <span style={{ color: '#1976D2' }}> organização</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: '#757575' }}>
               Teste grátis por 10 dias, sem compromisso. Cancele a qualquer momento antes da cobrança.
             </p>
           </motion.div>
@@ -122,33 +122,60 @@ export default function PricingSection({ onSelectPlan, isAuthenticated }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-                plan.popular ? 'ring-2 ring-blue-600' : ''
-              }`}
+              className="relative bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
+              style={{ 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                border: plan.popular ? '2px solid #1976D2' : 'none'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+              }}
             >
               {plan.popular && (
-                <div className="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 text-xs font-medium rounded-bl-xl">
+                <div 
+                  className="absolute top-0 right-0 text-white px-3 py-1 text-xs font-medium rounded-bl-xl"
+                  style={{ backgroundColor: '#1976D2' }}
+                >
                   <Star className="w-3 h-3 inline mr-1" />
                   Mais Popular
                 </div>
               )}
 
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-1">{plan.name}</h3>
-                <p className="text-sm text-gray-500 mb-4">{plan.description}</p>
+                <h3 className="text-xl font-bold mb-1" style={{ color: '#212121' }}>{plan.name}</h3>
+                <p className="text-sm mb-4" style={{ color: '#757575' }}>{plan.description}</p>
                 
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">R${plan.price.toFixed(2).replace('.', ',')}</span>
-                  <span className="text-gray-500">/mês</span>
+                  <span className="text-4xl font-bold" style={{ color: '#212121' }}>R${plan.price.toFixed(2).replace('.', ',')}</span>
+                  <span style={{ color: '#757575' }}>/mês</span>
                 </div>
 
                 <Button
                   onClick={() => onSelectPlan(plan)}
-                  className={`w-full mb-6 rounded-xl py-6 transition-all duration-300 ${
-                    plan.popular 
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl' 
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                  }`}
+                  className="w-full mb-6 py-6 min-h-[56px] transition-all duration-300"
+                  style={{ 
+                    backgroundColor: plan.popular ? '#1976D2' : '#F5F5F5',
+                    color: plan.popular ? 'white' : '#212121',
+                    borderRadius: '12px',
+                    boxShadow: plan.popular ? '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)' : 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (plan.popular) {
+                      e.currentTarget.style.backgroundColor = '#1565C0';
+                    } else {
+                      e.currentTarget.style.backgroundColor = '#E0E0E0';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (plan.popular) {
+                      e.currentTarget.style.backgroundColor = '#1976D2';
+                    } else {
+                      e.currentTarget.style.backgroundColor = '#F5F5F5';
+                    }
+                  }}
                 >
                   {isAuthenticated ? 'Começar Trial Grátis' : 'Começar Agora'}
                 </Button>
@@ -156,16 +183,16 @@ export default function PricingSection({ onSelectPlan, isAuthenticated }) {
                 <div className="space-y-3">
                   {plan.features.map((feature, i) => (
                     <div key={i} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-gray-600">{feature}</span>
+                      <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#4CAF50' }} />
+                      <span className="text-sm" style={{ color: '#757575' }}>{feature}</span>
                     </div>
                   ))}
                   {plan.notIncluded.map((feature, i) => (
                     <div key={i} className="flex items-start gap-2 opacity-50">
                       <div className="w-5 h-5 flex-shrink-0 mt-0.5 flex items-center justify-center">
-                        <div className="w-1.5 h-0.5 bg-gray-400 rounded" />
+                        <div className="w-1.5 h-0.5 rounded" style={{ backgroundColor: '#9E9E9E' }} />
                       </div>
-                      <span className="text-sm text-gray-400 line-through">{feature}</span>
+                      <span className="text-sm line-through" style={{ color: '#9E9E9E' }}>{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -175,7 +202,7 @@ export default function PricingSection({ onSelectPlan, isAuthenticated }) {
         </div>
 
         <div className="mt-12 text-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-sm" style={{ color: '#757575' }}>
             Todos os preços em Reais (BRL). Cobranças mensais após o período de teste.
           </p>
         </div>

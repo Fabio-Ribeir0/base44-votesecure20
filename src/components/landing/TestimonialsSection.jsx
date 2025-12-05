@@ -40,11 +40,11 @@ export default function TestimonialsSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#212121' }}>
               O que nossos clientes
-              <span className="text-blue-600"> dizem</span>
+              <span style={{ color: '#1976D2' }}> dizem</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: '#757575' }}>
               Organizações de todo Brasil confiam no VoteSecure para suas votações eletrônicas.
             </p>
           </motion.div>
@@ -58,17 +58,21 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-gray-50 rounded-2xl p-8 relative"
+              className="rounded-2xl p-8 relative"
+              style={{ 
+                backgroundColor: '#F5F5F5',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+              }}
             >
-              <Quote className="absolute top-6 right-6 w-8 h-8 text-blue-100" />
+              <Quote className="absolute top-6 right-6 w-8 h-8" style={{ color: '#BBDEFB' }} />
               
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  <Star key={i} className="w-5 h-5" style={{ fill: '#FFB300', color: '#FFB300' }} />
                 ))}
               </div>
 
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <p className="mb-6 leading-relaxed" style={{ color: '#757575' }}>
                 "{testimonial.content}"
               </p>
 
@@ -79,8 +83,8 @@ export default function TestimonialsSection() {
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
-                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-gray-500">{testimonial.role}, {testimonial.company}</p>
+                  <p className="font-semibold" style={{ color: '#212121' }}>{testimonial.name}</p>
+                  <p className="text-sm" style={{ color: '#757575' }}>{testimonial.role}, {testimonial.company}</p>
                 </div>
               </div>
             </motion.div>

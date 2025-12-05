@@ -5,11 +5,14 @@ import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 
 export default function CTASection({ onGetStarted }) {
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-600 to-blue-800 relative overflow-hidden">
+    <section 
+      className="py-20 relative overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #1976D2 0%, #0D47A1 100%)' }}
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-0 w-64 h-64 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }} />
+        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }} />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -20,7 +23,10 @@ export default function CTASection({ onGetStarted }) {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-white/10 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div 
+            className="inline-flex items-center gap-2 text-white px-4 py-2 rounded-full text-sm font-medium mb-6"
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          >
             <Shield className="w-4 h-4" />
             Comece seu teste gratuito hoje
           </div>
@@ -30,7 +36,7 @@ export default function CTASection({ onGetStarted }) {
             <span className="block">assembleias digitais?</span>
           </h2>
 
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl mb-8 max-w-2xl mx-auto" style={{ color: '#BBDEFB' }}>
             Junte-se a centenas de organizações que já modernizaram suas votações com o VoteSecure.
           </p>
 
@@ -38,14 +44,30 @@ export default function CTASection({ onGetStarted }) {
             <Button 
               size="lg"
               onClick={onGetStarted}
-              className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              className="px-8 py-6 text-lg min-h-[56px] transition-all duration-300"
+              style={{ 
+                backgroundColor: 'white',
+                color: '#1976D2',
+                borderRadius: '12px',
+                boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#E3F2FD';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)';
+              }}
             >
               Começar Grátis
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </div>
 
-          <div className="flex flex-wrap gap-6 justify-center text-sm text-blue-100">
+          <div className="flex flex-wrap gap-6 justify-center text-sm" style={{ color: '#BBDEFB' }}>
             {['Configuração em 5 minutos', 'Suporte em português', 'Cancele quando quiser'].map((item, i) => (
               <div key={i} className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5" />
