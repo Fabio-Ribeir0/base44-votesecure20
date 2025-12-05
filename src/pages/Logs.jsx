@@ -140,7 +140,14 @@ export default function Logs() {
           </div>
 
           {/* Filters */}
-          <Card className="mb-6">
+          <Card 
+            className="mb-6"
+            style={{ 
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              borderRadius: '8px',
+              border: 'none'
+            }}
+          >
             <CardContent className="p-4">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">

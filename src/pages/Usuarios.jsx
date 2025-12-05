@@ -166,7 +166,14 @@ export default function Usuarios() {
           </div>
 
           {/* Search */}
-          <Card className="mb-6">
+          <Card 
+            className="mb-6"
+            style={{ 
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              borderRadius: '8px',
+              border: 'none'
+            }}
+          >
             <CardContent className="p-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
