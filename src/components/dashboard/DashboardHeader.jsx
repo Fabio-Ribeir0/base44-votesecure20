@@ -9,7 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, User, Building2, LogOut, ChevronDown, Settings } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Bell, User, Building2, LogOut, ChevronDown, Settings, CreditCard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function DashboardHeader({ user, tenant }) {
@@ -33,65 +39,157 @@ export default function DashboardHeader({ user, tenant }) {
   const trialDays = getTrialDaysLeft();
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6">
+    <header 
+      className="h-16 bg-white flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30"
+      style={{ 
+        borderBottom: '1px solid #E0E0E0',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+      }}
+    >
       {/* Left - Page Title or Search */}
       <div className="flex items-center gap-4">
         {/* Spacer for mobile menu button */}
         <div className="w-10 lg:hidden" />
         
         {trialDays !== null && (
-          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+          <Badge 
+            variant="outline" 
+            className="text-xs sm:text-sm"
+            style={{ backgroundColor: '#FFF3E0', color: '#E65100', borderColor: '#FFB74D' }}
+          >
             {trialDays} dias restantes no trial
           </Badge>
         )}
       </div>
 
       {/* Right - User Actions */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Upgrade Button for Trialing */}
+        {tenant?.status === 'trialing' && (
+          <Link 
+            to={createPageUrl('MinhaOrganizacao')}
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+            style={{ 
+              backgroundColor: '#1976D2', 
+              color: 'white',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#1565C0';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#1976D2';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+            }}
+          >
+            <CreditCard className="w-4 h-4" />
+            Ativar Plano
+          </Link>
+        )}
+
         {/* Notifications */}
-        <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button 
+                className="relative p-2.5 rounded-lg transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                style={{ color: '#757575' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#F5F5F5';
+                  e.currentTarget.style.color = '#1976D2';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#757575';
+                }}
+              >
+                <Bell className="w-5 h-5" />
+                <span className="absolute top-2 right-2 w-2 h-2 rounded-full" style={{ backgroundColor: '#F44336' }}></span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="bg-gray-900 text-white text-sm">
+              Notificações
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
         {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full pl-3 pr-2 py-1.5">
-              <span className="text-sm font-medium text-gray-700 hidden sm:block max-w-[120px] truncate">
+            <button 
+              className="flex items-center gap-2 rounded-full pl-3 pr-2 py-1.5 transition-all duration-200 min-h-[44px]"
+              style={{ backgroundColor: '#F5F5F5' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#EEEEEE';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#F5F5F5';
+              }}
+            >
+              <span className="text-sm font-medium hidden sm:block max-w-[120px] truncate" style={{ color: '#212121' }}>
                 {user?.full_name || user?.email}
               </span>
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+              <div 
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                style={{ backgroundColor: '#1976D2' }}
+              >
                 {getInitials(user?.full_name)}
               </div>
-              <ChevronDown className="w-4 h-4 text-gray-500" />
+              <ChevronDown className="w-4 h-4" style={{ color: '#757575' }} />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <div className="px-2 py-1.5">
-              <p className="text-sm font-medium text-gray-900">{user?.full_name}</p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
-              <Badge variant="secondary" className="mt-1 text-xs">
+          <DropdownMenuContent 
+            align="end" 
+            className="w-56"
+            style={{ 
+              boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+              borderRadius: '8px',
+              border: '1px solid #E0E0E0'
+            }}
+          >
+            <div className="px-3 py-2">
+              <p className="text-sm font-medium" style={{ color: '#212121' }}>{user?.full_name}</p>
+              <p className="text-xs" style={{ color: '#757575' }}>{user?.email}</p>
+              <Badge 
+                variant="secondary" 
+                className="mt-1.5 text-xs"
+                style={{ backgroundColor: '#BBDEFB', color: '#1976D2' }}
+              >
                 {user?.perfil_tenant || 'Membro'}
               </Badge>
             </div>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator style={{ backgroundColor: '#E0E0E0' }} />
             <DropdownMenuItem asChild>
-              <Link to={createPageUrl('MeuPerfil')} className="flex items-center gap-2 cursor-pointer">
-                <User className="w-4 h-4" />
+              <Link 
+                to={createPageUrl('MeuPerfil')} 
+                className="flex items-center gap-2 cursor-pointer py-2.5 px-3 min-h-[44px]"
+                style={{ color: '#212121' }}
+              >
+                <User className="w-4 h-4" style={{ color: '#757575' }} />
                 Meu Perfil
               </Link>
             </DropdownMenuItem>
             {['Administrador', 'Presidente'].includes(user?.perfil_tenant) && (
               <DropdownMenuItem asChild>
-                <Link to={createPageUrl('MinhaOrganizacao')} className="flex items-center gap-2 cursor-pointer">
-                  <Building2 className="w-4 h-4" />
+                <Link 
+                  to={createPageUrl('MinhaOrganizacao')} 
+                  className="flex items-center gap-2 cursor-pointer py-2.5 px-3 min-h-[44px]"
+                  style={{ color: '#212121' }}
+                >
+                  <Building2 className="w-4 h-4" style={{ color: '#757575' }} />
                   Minha Organização
                 </Link>
               </DropdownMenuItem>
             )}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 cursor-pointer text-red-600">
+            <DropdownMenuSeparator style={{ backgroundColor: '#E0E0E0' }} />
+            <DropdownMenuItem 
+              onClick={handleLogout} 
+              className="flex items-center gap-2 cursor-pointer py-2.5 px-3 min-h-[44px]"
+              style={{ color: '#F44336' }}
+            >
               <LogOut className="w-4 h-4" />
               Sair
             </DropdownMenuItem>
