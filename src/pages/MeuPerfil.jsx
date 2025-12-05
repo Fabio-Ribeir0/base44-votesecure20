@@ -147,14 +147,14 @@ export default function MeuPerfil() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent" style={{ borderColor: '#1976D2', borderTopColor: 'transparent' }}></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#F5F5F5' }}>
       <Sidebar 
         user={user} 
         tenant={tenant} 
@@ -167,16 +167,22 @@ export default function MeuPerfil() {
         
         <main className="p-4 lg:p-6 max-w-4xl mx-auto">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Meu Perfil</h1>
-            <p className="text-gray-600">Gerencie suas informações pessoais e preferências</p>
+            <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Meu Perfil</h1>
+            <p style={{ color: '#757575' }}>Gerencie suas informações pessoais e preferências</p>
           </div>
 
           <div className="space-y-6">
             {/* Personal Info */}
-            <Card>
+            <Card
+              style={{ 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                borderRadius: '8px',
+                border: 'none'
+              }}
+            >
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5 text-blue-600" />
+                <CardTitle className="flex items-center gap-2" style={{ color: '#212121' }}>
+                  <User className="w-5 h-5" style={{ color: '#1976D2' }} />
                   Informações Pessoais
                 </CardTitle>
                 <CardDescription>
@@ -220,12 +226,29 @@ export default function MeuPerfil() {
                     <p className="font-medium text-gray-900">Perfil no Sistema</p>
                     <p className="text-sm text-gray-500">Seu nível de acesso na organização</p>
                   </div>
-                  <Badge className="bg-blue-100 text-blue-700">
+                  <Badge style={{ backgroundColor: '#BBDEFB', color: '#1976D2' }}>
                     {user?.perfil_tenant || 'Membro'}
                   </Badge>
                 </div>
 
-                <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700">
+                <Button 
+                  onClick={handleSave} 
+                  disabled={isSaving} 
+                  className="text-white min-h-[44px] transition-all duration-200"
+                  style={{ 
+                    backgroundColor: '#1976D2',
+                    borderRadius: '8px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1565C0';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1976D2';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
                   {isSaving ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -242,10 +265,16 @@ export default function MeuPerfil() {
             </Card>
 
             {/* Privacy & Data */}
-            <Card>
+            <Card
+              style={{ 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                borderRadius: '8px',
+                border: 'none'
+              }}
+            >
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-blue-600" />
+                <CardTitle className="flex items-center gap-2" style={{ color: '#212121' }}>
+                  <Shield className="w-5 h-5" style={{ color: '#1976D2' }} />
                   Privacidade e Dados (LGPD)
                 </CardTitle>
                 <CardDescription>
