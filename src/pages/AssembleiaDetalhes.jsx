@@ -460,16 +460,11 @@ export default function AssembleiaDetalhes() {
             <DialogTitle>QR Code para Check-in</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center p-4">
-            <div className="bg-white p-4 rounded-xl border-2 border-dashed border-gray-300">
-              <div className="w-[200px] h-[200px] flex items-center justify-center bg-gray-50 rounded">
-                <div className="text-center">
-                  <QrCode className="w-16 h-16 text-blue-600 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">QR Code</p>
-                </div>
-              </div>
+            <div className="bg-white p-4 rounded-xl">
+              <QRCode value={getCheckinUrl()} size={200} />
             </div>
             <p className="text-sm text-gray-500 mt-4 text-center">
-              Compartilhe este link para fazer check-in na assembleia
+              Escaneie este QR Code para fazer check-in na assembleia
             </p>
             <div className="mt-2 p-3 bg-gray-100 rounded-lg w-full">
               <p className="text-xs text-gray-600 break-all text-center font-mono">
