@@ -143,7 +143,23 @@ export default function Usuarios() {
               <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Usuários e Permissões</h1>
               <p style={{ color: '#757575' }}>Gerencie os usuários e seus perfis de acesso</p>
             </div>
-            <Button onClick={() => setShowConviteModal(true)} className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              onClick={() => setShowConviteModal(true)} 
+              className="text-white min-h-[44px] transition-all duration-200"
+              style={{ 
+                backgroundColor: '#1976D2',
+                borderRadius: '8px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1565C0';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#1976D2';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
               <UserPlus className="w-4 h-4 mr-2" />
               Convidar Usuário
             </Button>

@@ -156,7 +156,23 @@ export default function Assembleias() {
               <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Assembleias</h1>
               <p style={{ color: '#757575' }}>Gerencie as assembleias da sua organização</p>
             </div>
-            <Button onClick={() => setShowAddModal(true)} className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              onClick={() => setShowAddModal(true)} 
+              className="text-white min-h-[44px] transition-all duration-200"
+              style={{ 
+                backgroundColor: '#1976D2',
+                borderRadius: '8px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1565C0';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#1976D2';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Nova Assembleia
             </Button>
