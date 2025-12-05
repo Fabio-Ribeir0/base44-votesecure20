@@ -130,13 +130,13 @@ export default function Procuracoes() {
 
   const getStatusBadge = (status) => {
     const config = {
-      'Ativa': { class: 'bg-green-100 text-green-700', icon: CheckCircle },
-      'Revogada': { class: 'bg-red-100 text-red-700', icon: XCircle },
-      'Expirada': { class: 'bg-gray-100 text-gray-700', icon: Clock }
+      'Ativa': { style: { backgroundColor: '#E8F5E9', color: '#4CAF50' }, icon: CheckCircle },
+      'Revogada': { style: { backgroundColor: '#FFEBEE', color: '#F44336' }, icon: XCircle },
+      'Expirada': { style: { backgroundColor: '#F5F5F5', color: '#757575' }, icon: Clock }
     };
     const c = config[status] || config['Ativa'];
     return (
-      <Badge className={`${c.class} flex items-center gap-1`}>
+      <Badge className="flex items-center gap-1" style={c.style}>
         <c.icon className="w-3 h-3" />
         {status}
       </Badge>
@@ -201,7 +201,14 @@ export default function Procuracoes() {
           </div>
 
           {/* Filters */}
-          <Card className="mb-6">
+          <Card 
+            className="mb-6"
+            style={{ 
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              borderRadius: '8px',
+              border: 'none'
+            }}
+          >
             <CardContent className="p-4">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
@@ -229,7 +236,13 @@ export default function Procuracoes() {
           </Card>
 
           {/* Table */}
-          <Card>
+          <Card
+            style={{ 
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              borderRadius: '8px',
+              border: 'none'
+            }}
+          >
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <Table>
@@ -301,7 +314,7 @@ export default function Procuracoes() {
             </CardContent>
           </Card>
 
-          <div className="mt-4 text-sm text-gray-500">
+          <div className="mt-4 text-sm" style={{ color: '#757575' }}>
             Mostrando {filteredProcuracoes.length} de {procuracoes.length} procurações
           </div>
         </main>
