@@ -303,6 +303,7 @@ export default function Assembleias() {
         assembleia={editingAssembleia}
         tenantId={tenant?.id}
         userId={user?.id}
+        user={user}
         onSuccess={() => {
           setShowAddModal(false);
           setEditingAssembleia(null);

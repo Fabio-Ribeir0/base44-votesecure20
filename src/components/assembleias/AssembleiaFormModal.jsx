@@ -19,8 +19,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, CalendarDays } from "lucide-react";
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
-export default function AssembleiaFormModal({ open, onOpenChange, assembleia, tenantId, userId, onSuccess }) {
+export default function AssembleiaFormModal({ open, onOpenChange, assembleia, tenantId, userId, onSuccess, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
@@ -96,8 +97,16 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
       if (assembleia) {
         await base44.entities.Assembleia.update(assembleia.id, data);
         toast.success('Assembleia atualizada com sucesso!');
+        
+        // Log audit
+        if (user) {
+          AuditLogger.logUpdate('Assembleia', assembleia.id,
+            `Assembleia "${data.nome}" atualizada`,
+            tenantId, user
+          );
+        }
       } else {
-        await base44.entities.Assembleia.create({
+        const newAssembleia = await base44.entities.Assembleia.create({
           ...data,
           tenant_id: tenantId,
           criado_por: userId,
@@ -105,6 +114,14 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
           qr_code_checkin_token: generateToken()
         });
         toast.success('Assembleia criada com sucesso!');
+        
+        // Log audit
+        if (user) {
+          AuditLogger.logCreate('Assembleia', newAssembleia.id,
+            `Assembleia "${data.nome}" criada`,
+            tenantId, user
+          );
+        }
       }
       onSuccess();
     } catch (error) {
