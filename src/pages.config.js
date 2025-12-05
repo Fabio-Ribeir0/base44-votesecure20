@@ -10,6 +10,7 @@ import Usuarios from './pages/Usuarios';
 import Logs from './pages/Logs';
 import Procuracoes from './pages/Procuracoes';
 import PaymentSuccess from './pages/PaymentSuccess';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -30,4 +31,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };
