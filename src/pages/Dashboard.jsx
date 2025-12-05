@@ -139,11 +139,11 @@ export default function Dashboard() {
     }
   ];
 
-  const colorClasses = {
-    blue: 'bg-blue-100 text-blue-600',
-    green: 'bg-green-100 text-green-600',
-    purple: 'bg-purple-100 text-purple-600',
-    orange: 'bg-orange-100 text-orange-600'
+  const colorStyles = {
+    blue: { backgroundColor: '#BBDEFB', color: '#1976D2' },
+    green: { backgroundColor: '#E8F5E9', color: '#4CAF50' },
+    purple: { backgroundColor: '#E1BEE7', color: '#7B1FA2' },
+    orange: { backgroundColor: '#FFF3E0', color: '#E65100' }
   };
 
   return (
@@ -166,10 +166,22 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6"
             >
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
-                <p className="text-yellow-800 flex-1">{trialAlert.message}</p>
-                <Button size="sm" className="bg-yellow-600 hover:bg-yellow-700">
+              <div 
+                className="rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3"
+                style={{ 
+                  backgroundColor: '#FFF3E0', 
+                  border: '1px solid #FFB74D',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+                }}
+              >
+                <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#E65100' }} />
+                <p className="flex-1" style={{ color: '#E65100' }}>{trialAlert.message}</p>
+                <Button 
+                  size="sm" 
+                  className="w-full sm:w-auto text-white min-h-[44px]"
+                  style={{ backgroundColor: '#E65100' }}
+                  onClick={() => navigate(createPageUrl('MinhaOrganizacao'))}
+                >
                   Fazer Upgrade
                 </Button>
               </div>
@@ -178,10 +190,10 @@ export default function Dashboard() {
 
           {/* Welcome */}
           <div className="mb-8">
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl lg:text-3xl font-bold" style={{ color: '#212121' }}>
               Bem-vindo, {user?.full_name?.split(' ')[0]}! 👋
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="mt-1" style={{ color: '#757575' }}>
               Aqui está um resumo da sua organização
             </p>
           </div>
@@ -189,42 +201,79 @@ export default function Dashboard() {
           {/* Stats Cards */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {statCards.map((stat, index) => (
-              <motion.div
-                key={stat.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card 
-                  className={`hover:shadow-lg transition-all duration-300 ${stat.page ? 'cursor-pointer hover:-translate-y-1' : ''}`}
-                  onClick={() => stat.page && navigate(createPageUrl(stat.page))}
+                <motion.div
+                  key={stat.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-500 mb-1">{stat.title}</p>
-                        <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                  <Card 
+                    className={`transition-all duration-300 ${stat.page ? 'cursor-pointer' : ''}`}
+                    style={{ 
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                      borderRadius: '8px',
+                      border: 'none'
+                    }}
+                    onClick={() => stat.page && navigate(createPageUrl(stat.page))}
+                    onMouseEnter={(e) => {
+                      if (stat.page) {
+                        e.currentTarget.style.boxShadow = '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm mb-1" style={{ color: '#757575' }}>{stat.title}</p>
+                          <p className="text-3xl font-bold" style={{ color: '#212121' }}>{stat.value}</p>
+                        </div>
+                        <div 
+                          className="w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={colorStyles[stat.color]}
+                        >
+                          <stat.icon className="w-6 h-6" />
+                        </div>
                       </div>
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${colorClasses[stat.color]}`}>
-                        <stat.icon className="w-6 h-6" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
           </div>
 
           {/* Quick Actions */}
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <Card>
+            <Card 
+              style={{ 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                borderRadius: '8px',
+                border: 'none'
+              }}
+            >
               <CardHeader>
-                <CardTitle className="text-lg">Ações Rápidas</CardTitle>
+                <CardTitle className="text-lg" style={{ color: '#212121' }}>Ações Rápidas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button 
                   onClick={() => navigate(createPageUrl('Assembleias'))}
-                  className="w-full justify-between bg-blue-600 hover:bg-blue-700"
+                  className="w-full justify-between text-white min-h-[44px] transition-all duration-200"
+                  style={{ 
+                    backgroundColor: '#1976D2',
+                    borderRadius: '8px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1565C0';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1976D2';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
                 >
                   <span className="flex items-center gap-2">
                     <Plus className="w-4 h-4" />
@@ -235,7 +284,20 @@ export default function Dashboard() {
                 <Button 
                   onClick={() => navigate(createPageUrl('Membros'))}
                   variant="outline"
-                  className="w-full justify-between"
+                  className="w-full justify-between min-h-[44px] transition-all duration-200"
+                  style={{ 
+                    borderColor: '#1976D2',
+                    color: '#1976D2',
+                    borderRadius: '8px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#BBDEFB';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
                 >
                   <span className="flex items-center gap-2">
                     <Users className="w-4 h-4" />
@@ -246,28 +308,37 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card 
+              style={{ 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                borderRadius: '8px',
+                border: 'none'
+              }}
+            >
               <CardHeader>
-                <CardTitle className="text-lg">Status do Plano</CardTitle>
+                <CardTitle className="text-lg" style={{ color: '#212121' }}>Status do Plano</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Plano Atual</span>
-                    <Badge className="bg-blue-100 text-blue-700">
+                    <span style={{ color: '#757575' }}>Plano Atual</span>
+                    <Badge style={{ backgroundColor: '#BBDEFB', color: '#1976D2' }}>
                       {tenant?.plano_ativo ? 'Ativo' : 'Básico'}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Status</span>
-                    <Badge className={tenant?.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}>
+                    <span style={{ color: '#757575' }}>Status</span>
+                    <Badge style={tenant?.status === 'active' 
+                      ? { backgroundColor: '#E8F5E9', color: '#4CAF50' } 
+                      : { backgroundColor: '#FFF3E0', color: '#E65100' }
+                    }>
                       {tenant?.status === 'active' ? 'Ativo' : 'Em teste'}
                     </Badge>
                   </div>
                   {tenant?.status === 'trialing' && tenant?.data_fim_trial && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Termina em</span>
-                      <span className="font-medium">
+                      <span style={{ color: '#757575' }}>Termina em</span>
+                      <span className="font-medium" style={{ color: '#212121' }}>
                         {new Date(tenant.data_fim_trial).toLocaleDateString('pt-BR')}
                       </span>
                     </div>
