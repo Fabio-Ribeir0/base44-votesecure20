@@ -91,17 +91,17 @@ export default function Logs() {
     }
   };
 
-  const getAcaoBadgeColor = (acao) => {
-    const colors = {
-      'Criar': 'bg-green-100 text-green-700',
-      'Atualizar': 'bg-blue-100 text-blue-700',
-      'Excluir': 'bg-red-100 text-red-700',
-      'Login': 'bg-purple-100 text-purple-700',
-      'Logout': 'bg-gray-100 text-gray-700',
-      'Votar': 'bg-indigo-100 text-indigo-700',
-      'Check-in': 'bg-cyan-100 text-cyan-700'
+  const getAcaoBadgeStyle = (acao) => {
+    const styles = {
+      'Criar': { backgroundColor: '#E8F5E9', color: '#4CAF50' },
+      'Atualizar': { backgroundColor: '#BBDEFB', color: '#1976D2' },
+      'Excluir': { backgroundColor: '#FFEBEE', color: '#F44336' },
+      'Login': { backgroundColor: '#E1BEE7', color: '#7B1FA2' },
+      'Logout': { backgroundColor: '#F5F5F5', color: '#757575' },
+      'Votar': { backgroundColor: '#E8EAF6', color: '#3F51B5' },
+      'Check-in': { backgroundColor: '#E0F7FA', color: '#00ACC1' }
     };
-    return colors[acao] || 'bg-gray-100 text-gray-700';
+    return styles[acao] || { backgroundColor: '#F5F5F5', color: '#757575' };
   };
 
   const filteredLogs = logs.filter(log => {
@@ -214,7 +214,7 @@ export default function Logs() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={getAcaoBadgeColor(log.acao)}>
+                          <Badge style={getAcaoBadgeStyle(log.acao)}>
                             {log.acao}
                           </Badge>
                         </TableCell>

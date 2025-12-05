@@ -106,15 +106,15 @@ export default function Usuarios() {
     u.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getPerfilBadgeColor = (perfil) => {
-    const colors = {
-      'Administrador': 'bg-red-100 text-red-700',
-      'Presidente': 'bg-purple-100 text-purple-700',
-      'Secretário': 'bg-blue-100 text-blue-700',
-      'Observador': 'bg-gray-100 text-gray-700',
-      'Membro Votante': 'bg-green-100 text-green-700'
+  const getPerfilBadgeStyle = (perfil) => {
+    const styles = {
+      'Administrador': { backgroundColor: '#FFEBEE', color: '#F44336' },
+      'Presidente': { backgroundColor: '#E1BEE7', color: '#7B1FA2' },
+      'Secretário': { backgroundColor: '#BBDEFB', color: '#1976D2' },
+      'Observador': { backgroundColor: '#F5F5F5', color: '#757575' },
+      'Membro Votante': { backgroundColor: '#E8F5E9', color: '#4CAF50' }
     };
-    return colors[perfil] || 'bg-gray-100 text-gray-700';
+    return styles[perfil] || { backgroundColor: '#F5F5F5', color: '#757575' };
   };
 
   if (isLoading) {
@@ -230,7 +230,7 @@ export default function Usuarios() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={getPerfilBadgeColor(usuario.perfil_tenant)}>
+                          <Badge style={getPerfilBadgeStyle(usuario.perfil_tenant)}>
                             {usuario.perfil_tenant || 'Membro Votante'}
                           </Badge>
                         </TableCell>
