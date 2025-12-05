@@ -3,7 +3,7 @@ import { Shield, Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: '#212121', color: '#BDBDBD' }}
+    <footer style={{ backgroundColor: '#212121', color: '#BDBDBD' }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo & Description */}
