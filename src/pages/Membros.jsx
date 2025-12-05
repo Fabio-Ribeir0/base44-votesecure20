@@ -157,8 +157,8 @@ export default function Membros() {
         <main className="p-4 lg:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Membros</h1>
-              <p className="text-gray-600">Gerencie os membros da sua organização</p>
+              <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Membros</h1>
+              <p style={{ color: '#757575' }}>Gerencie os membros da sua organização</p>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setShowImportModal(true)}>

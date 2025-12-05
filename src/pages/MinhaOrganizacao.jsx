@@ -256,8 +256,8 @@ export default function MinhaOrganizacao() {
         
         <main className="p-4 lg:p-6 max-w-4xl mx-auto">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Minha Organização</h1>
-            <p className="text-gray-600">Gerencie os dados da sua organização e plano</p>
+            <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Minha Organização</h1>
+            <p style={{ color: '#757575' }}>Gerencie os dados da sua organização e plano</p>
           </div>
 
           <div className="space-y-6">
