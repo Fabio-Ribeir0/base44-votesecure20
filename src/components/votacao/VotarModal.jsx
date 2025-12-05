@@ -13,8 +13,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Loader2, Vote, Lock, Scale, Hand } from "lucide-react";
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
-export default function VotarModal({ open, onOpenChange, votacao, membroId, pesoVoto = 1, onSuccess }) {
+export default function VotarModal({ open, onOpenChange, votacao, membroId, pesoVoto = 1, onSuccess, tenantId, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -76,6 +77,15 @@ export default function VotarModal({ open, onOpenChange, votacao, membroId, peso
       }
 
       await base44.entities.Voto.create(votoData);
+      
+      // Log audit (only if not secret vote)
+      if (!votacao.voto_secreto && tenantId && user) {
+        AuditLogger.logVote(votacao.id,
+          `Voto registrado na votação "${votacao.titulo}"${isAbstencao ? ' (abstenção)' : ''}`,
+          tenantId, user
+        );
+      }
+      
       toast.success('Voto registrado com sucesso!');
       onSuccess?.();
     } catch (error) {

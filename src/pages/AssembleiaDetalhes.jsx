@@ -655,6 +655,8 @@ export default function AssembleiaDetalhes() {
         votacao={votandoEm}
         membroId={myMembro?.id}
         pesoVoto={myMembro?.peso_voto || 1}
+        tenantId={tenant?.id}
+        user={user}
         onSuccess={() => {
           setVotandoEm(null);
           loadData();
