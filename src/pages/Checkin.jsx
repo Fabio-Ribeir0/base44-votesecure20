@@ -144,31 +144,34 @@ export default function Checkin() {
   const getStatusIcon = () => {
     switch (status) {
       case 'success':
-        return <CheckCircle className="w-16 h-16 text-green-500" />;
+        return <CheckCircle className="w-16 h-16" style={{ color: '#4CAF50' }} />;
       case 'already_checked':
-        return <CheckCircle className="w-16 h-16 text-blue-500" />;
+        return <CheckCircle className="w-16 h-16" style={{ color: '#1976D2' }} />;
       case 'error':
-        return <XCircle className="w-16 h-16 text-red-500" />;
+        return <XCircle className="w-16 h-16" style={{ color: '#F44336' }} />;
       default:
-        return <Loader2 className="w-16 h-16 text-blue-500 animate-spin" />;
+        return <Loader2 className="w-16 h-16 animate-spin" style={{ color: '#1976D2' }} />;
     }
   };
 
-  const getStatusColor = () => {
+  const getStatusStyle = () => {
     switch (status) {
       case 'success':
-        return 'bg-green-50 border-green-200';
+        return { backgroundColor: '#E8F5E9', borderColor: '#81C784' };
       case 'already_checked':
-        return 'bg-blue-50 border-blue-200';
+        return { backgroundColor: '#E3F2FD', borderColor: '#64B5F6' };
       case 'error':
-        return 'bg-red-50 border-red-200';
+        return { backgroundColor: '#FFEBEE', borderColor: '#EF9A9A' };
       default:
-        return 'bg-gray-50 border-gray-200';
+        return { backgroundColor: '#F5F5F5', borderColor: '#E0E0E0' };
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: 'linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 50%, #E3F2FD 100%)' }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -176,11 +179,18 @@ export default function Checkin() {
       >
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          <Shield className="w-10 h-10 text-blue-600" />
-          <span className="text-2xl font-bold text-gray-900">VoteSecure</span>
+          <Shield className="w-10 h-10" style={{ color: '#1976D2' }} />
+          <span className="text-2xl font-bold" style={{ color: '#212121' }}>VoteSecure</span>
         </div>
 
-        <Card className={`border-2 ${getStatusColor()}`}>
+        <Card 
+          className="border-2"
+          style={{ 
+            ...getStatusStyle(),
+            borderRadius: '12px',
+            boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
+          }}
+        >
           <CardContent className="p-8 text-center">
             <motion.div
               initial={{ scale: 0.8 }}
@@ -191,23 +201,23 @@ export default function Checkin() {
               {getStatusIcon()}
             </motion.div>
 
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold mb-2" style={{ color: '#212121' }}>
               {status === 'loading' && 'Processando Check-in...'}
               {status === 'success' && 'Check-in Confirmado!'}
               {status === 'already_checked' && 'Já Registrado'}
               {status === 'error' && 'Ops!'}
             </h1>
 
-            <p className="text-gray-600 mb-6">{message}</p>
+            <p className="mb-6" style={{ color: '#757575' }}>{message}</p>
 
             {assembleia && (
-              <div className="bg-white rounded-lg p-4 mb-6 text-left">
-                <p className="text-sm text-gray-500">Assembleia</p>
-                <p className="font-semibold text-gray-900">{assembleia.nome}</p>
+              <div className="bg-white rounded-lg p-4 mb-6 text-left" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' }}>
+                <p className="text-sm" style={{ color: '#757575' }}>Assembleia</p>
+                <p className="font-semibold" style={{ color: '#212121' }}>{assembleia.nome}</p>
                 {assembleia.local && (
                   <>
-                    <p className="text-sm text-gray-500 mt-2">Local</p>
-                    <p className="text-gray-700">{assembleia.local}</p>
+                    <p className="text-sm mt-2" style={{ color: '#757575' }}>Local</p>
+                    <p style={{ color: '#424242' }}>{assembleia.local}</p>
                   </>
                 )}
               </div>
@@ -218,7 +228,8 @@ export default function Checkin() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="flex items-center justify-center gap-2 text-green-600 bg-green-100 rounded-lg p-3"
+                className="flex items-center justify-center gap-2 rounded-lg p-3"
+                style={{ backgroundColor: '#E8F5E9', color: '#4CAF50' }}
               >
                 <CheckCircle className="w-5 h-5" />
                 <span className="font-medium">Sua presença foi registrada</span>
@@ -229,7 +240,8 @@ export default function Checkin() {
               <Button 
                 onClick={() => window.location.reload()}
                 variant="outline"
-                className="mt-4"
+                className="mt-4 min-h-[44px] transition-all duration-200"
+                style={{ borderColor: '#1976D2', color: '#1976D2', borderRadius: '8px' }}
               >
                 Tentar Novamente
               </Button>
@@ -237,7 +249,7 @@ export default function Checkin() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm mt-6" style={{ color: '#757575' }}>
           Sistema de votação eletrônica seguro
         </p>
       </motion.div>
