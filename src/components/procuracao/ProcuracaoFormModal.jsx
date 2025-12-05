@@ -20,10 +20,11 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, Loader2, FileText } from "lucide-react";
+import { AuditLogger } from '@/components/audit/AuditLogger';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-export default function ProcuracaoFormModal({ open, onOpenChange, procuracao, tenantId, membros = [], assembleias = [], onSuccess }) {
+export default function ProcuracaoFormModal({ open, onOpenChange, procuracao, tenantId, membros = [], assembleias = [], onSuccess, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     outorgante_id: '',
@@ -100,9 +101,29 @@ export default function ProcuracaoFormModal({ open, onOpenChange, procuracao, te
       if (procuracao) {
         await base44.entities.Procuracao.update(procuracao.id, data);
         toast.success('Procuração atualizada!');
+        
+        // Log audit
+        if (user) {
+          const outorgante = membros.find(m => m.id === data.outorgante_id)?.nome_completo || 'Desconhecido';
+          const procurador = membros.find(m => m.id === data.procurador_id)?.nome_completo || 'Desconhecido';
+          AuditLogger.logUpdate('Procuracao', procuracao.id,
+            `Procuração de "${outorgante}" para "${procurador}" atualizada`,
+            tenantId, user
+          );
+        }
       } else {
-        await base44.entities.Procuracao.create(data);
+        const newProcuracao = await base44.entities.Procuracao.create(data);
         toast.success('Procuração criada!');
+        
+        // Log audit
+        if (user) {
+          const outorgante = membros.find(m => m.id === data.outorgante_id)?.nome_completo || 'Desconhecido';
+          const procurador = membros.find(m => m.id === data.procurador_id)?.nome_completo || 'Desconhecido';
+          AuditLogger.logCreate('Procuracao', newProcuracao.id,
+            `Procuração de "${outorgante}" para "${procurador}" criada`,
+            tenantId, user
+          );
+        }
       }
       onSuccess?.();
     } catch (error) {

@@ -303,6 +303,7 @@ export default function Procuracoes() {
         tenantId={tenant?.id}
         membros={membros}
         assembleias={assembleias}
+        user={user}
         onSuccess={() => {
           setShowAddModal(false);
           setEditingProcuracao(null);
