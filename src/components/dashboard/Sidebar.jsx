@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   Shield,
-  ChevronLeft
+  ChevronLeft,
+  ScrollText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -36,6 +37,13 @@ const menuItems = [
     label: 'Assembleias', 
     icon: CalendarDays, 
     page: 'Assembleias',
+    roles: ['Administrador', 'Presidente', 'Secretário']
+  },
+  { 
+    id: 'procuracoes',
+    label: 'Procurações', 
+    icon: ScrollText, 
+    page: 'Procuracoes',
     roles: ['Administrador', 'Presidente', 'Secretário']
   },
   { 

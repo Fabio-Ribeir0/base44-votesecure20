@@ -8,6 +8,7 @@ import AssembleiaDetalhes from './pages/AssembleiaDetalhes';
 import Checkin from './pages/Checkin';
 import Usuarios from './pages/Usuarios';
 import Logs from './pages/Logs';
+import Procuracoes from './pages/Procuracoes';
 
 
 export const PAGES = {
@@ -21,6 +22,7 @@ export const PAGES = {
     "Checkin": Checkin,
     "Usuarios": Usuarios,
     "Logs": Logs,
+    "Procuracoes": Procuracoes,
 }
 
 export const pagesConfig = {
