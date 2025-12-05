@@ -60,11 +60,17 @@ export default function Dashboard() {
 
       setTenant(tenants[0]);
 
-      // Load stats (in a real app, these would be actual queries)
-      // For now, setting placeholder data
+      // Load actual stats
+      const [membrosData, assembleiasData] = await Promise.all([
+        base44.entities.Membro.filter({ tenant_id: tenants[0].id, ativo: true }),
+        base44.entities.Assembleia.filter({ tenant_id: tenants[0].id })
+      ]);
+
+      const agendadas = assembleiasData.filter(a => ['Agendada', 'Em andamento'].includes(a.status));
+      
       setStats({
-        membros: 0,
-        assembleias: 0,
+        membros: membrosData.length,
+        assembleias: agendadas.length,
         votacoes: 0,
         votos: 0
       });
