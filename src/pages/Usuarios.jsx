@@ -181,10 +181,16 @@ export default function Usuarios() {
           </Card>
 
           {/* Users Table */}
-          <Card>
+          <Card
+            style={{ 
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              borderRadius: '8px',
+              border: 'none'
+            }}
+          >
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-blue-600" />
+              <CardTitle className="flex items-center gap-2" style={{ color: '#212121' }}>
+                <Shield className="w-5 h-5" style={{ color: '#1976D2' }} />
                 Usuários do Sistema
               </CardTitle>
             </CardHeader>
