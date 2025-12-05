@@ -9,6 +9,7 @@ import Checkin from './pages/Checkin';
 import Usuarios from './pages/Usuarios';
 import Logs from './pages/Logs';
 import Procuracoes from './pages/Procuracoes';
+import PaymentSuccess from './pages/PaymentSuccess';
 
 
 export const PAGES = {
@@ -23,6 +24,7 @@ export const PAGES = {
     "Usuarios": Usuarios,
     "Logs": Logs,
     "Procuracoes": Procuracoes,
+    "PaymentSuccess": PaymentSuccess,
 }
 
 export const pagesConfig = {
