@@ -135,8 +135,8 @@ export default function Logs() {
         
         <main className="p-4 lg:p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Logs de Auditoria</h1>
-            <p className="text-gray-600">Registro de todas as ações realizadas no sistema</p>
+            <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Logs de Auditoria</h1>
+            <p style={{ color: '#757575' }}>Registro de todas as ações realizadas no sistema</p>
           </div>
 
           {/* Filters */}

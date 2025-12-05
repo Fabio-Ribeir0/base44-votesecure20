@@ -140,8 +140,8 @@ export default function Usuarios() {
         <main className="p-4 lg:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Usuários e Permissões</h1>
-              <p className="text-gray-600">Gerencie os usuários e seus perfis de acesso</p>
+              <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Usuários e Permissões</h1>
+              <p style={{ color: '#757575' }}>Gerencie os usuários e seus perfis de acesso</p>
             </div>
             <Button onClick={() => setShowConviteModal(true)} className="bg-blue-600 hover:bg-blue-700">
               <UserPlus className="w-4 h-4 mr-2" />
