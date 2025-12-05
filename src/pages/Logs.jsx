@@ -77,18 +77,11 @@ export default function Logs() {
 
       setTenant(tenants[0]);
 
-      // Load logs (in MVP, we'll use placeholder data since LogAuditoria entity might not exist yet)
-      // In a real implementation, you would load from base44.entities.LogAuditoria
-      setLogs([
-        {
-          id: '1',
-          usuario_nome: userData.full_name,
-          acao: 'Login',
-          entidade_afetada: 'Usuario',
-          data_hora: new Date().toISOString(),
-          detalhes: 'Login bem-sucedido'
-        }
-      ]);
+      // Load logs from database
+      const logsData = await base44.entities.LogAuditoria.filter({ tenant_id: tenants[0].id });
+      // Sort by created_date descending
+      const sortedLogs = logsData.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+      setLogs(sortedLogs);
 
     } catch (error) {
       console.error('Error loading:', error);
@@ -104,7 +97,9 @@ export default function Logs() {
       'Atualizar': 'bg-blue-100 text-blue-700',
       'Excluir': 'bg-red-100 text-red-700',
       'Login': 'bg-purple-100 text-purple-700',
-      'Logout': 'bg-gray-100 text-gray-700'
+      'Logout': 'bg-gray-100 text-gray-700',
+      'Votar': 'bg-indigo-100 text-indigo-700',
+      'Check-in': 'bg-cyan-100 text-cyan-700'
     };
     return colors[acao] || 'bg-gray-100 text-gray-700';
   };
@@ -168,6 +163,8 @@ export default function Logs() {
                     <SelectItem value="Excluir">Excluir</SelectItem>
                     <SelectItem value="Login">Login</SelectItem>
                     <SelectItem value="Logout">Logout</SelectItem>
+                    <SelectItem value="Votar">Votar</SelectItem>
+                    <SelectItem value="Check-in">Check-in</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -207,13 +204,13 @@ export default function Logs() {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-400" />
-                            {format(new Date(log.data_hora), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                            {format(new Date(log.created_date), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
-                            <User className="w-4 h-4 text-gray-400" />
-                            {log.usuario_nome}
+                          <div className="flex flex-col">
+                            <span className="font-medium">{log.usuario_nome || 'Sistema'}</span>
+                            <span className="text-xs text-gray-500">{log.usuario_email}</span>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -222,7 +219,7 @@ export default function Logs() {
                           </Badge>
                         </TableCell>
                         <TableCell>{log.entidade_afetada}</TableCell>
-                        <TableCell className="max-w-xs truncate">
+                        <TableCell className="max-w-xs truncate" title={log.detalhes}>
                           {log.detalhes}
                         </TableCell>
                       </TableRow>
