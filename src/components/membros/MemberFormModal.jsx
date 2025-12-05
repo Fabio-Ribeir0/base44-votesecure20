@@ -19,10 +19,11 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Loader2, User } from "lucide-react";
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
 const TIPOS_MEMBRO = ['Proprietário', 'Inquilino', 'Representante', 'Outro'];
 
-export default function MemberFormModal({ open, onOpenChange, member, tenantId, onSuccess }) {
+export default function MemberFormModal({ open, onOpenChange, member, tenantId, onSuccess, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     nome_completo: '',
@@ -88,12 +89,28 @@ export default function MemberFormModal({ open, onOpenChange, member, tenantId, 
       if (member) {
         await base44.entities.Membro.update(member.id, formData);
         toast.success('Membro atualizado com sucesso!');
+        
+        // Log audit
+        if (user) {
+          AuditLogger.logUpdate('Membro', member.id,
+            `Membro "${formData.nome_completo}" atualizado`,
+            tenantId, user
+          );
+        }
       } else {
-        await base44.entities.Membro.create({
+        const newMembro = await base44.entities.Membro.create({
           ...formData,
           tenant_id: tenantId
         });
         toast.success('Membro cadastrado com sucesso!');
+        
+        // Log audit
+        if (user) {
+          AuditLogger.logCreate('Membro', newMembro.id,
+            `Membro "${formData.nome_completo}" cadastrado`,
+            tenantId, user
+          );
+        }
       }
       onSuccess();
     } catch (error) {

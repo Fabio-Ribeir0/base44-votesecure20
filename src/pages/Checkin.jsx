@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { Shield, CheckCircle, XCircle, Loader2, AlertCircle } from "lucide-react";
+import { Shield, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
 export default function Checkin() {
   const navigate = useNavigate();
@@ -121,6 +122,12 @@ export default function Checkin() {
         data_hora: new Date().toISOString(),
         metodo: 'QR Code'
       });
+
+      // Log audit
+      AuditLogger.logCheckin(assembleiaData.id,
+        `Check-in via QR Code de "${membro.nome_completo}" na assembleia "${assembleiaData.nome}"`,
+        assembleiaData.tenant_id, user
+      );
 
       setStatus('success');
       setMessage('Check-in realizado com sucesso!');

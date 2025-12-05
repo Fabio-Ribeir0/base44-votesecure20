@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Sidebar from '@/components/dashboard/Sidebar';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import { AuditLogger } from '@/components/audit/AuditLogger';
 
 const TIPOS_ORGANIZACAO = [
   'Condomínio',
@@ -130,6 +131,12 @@ export default function MinhaOrganizacao() {
       setTenant({ ...tenant, ...formData });
       setIsEditing(false);
       toast.success('Organização atualizada com sucesso!');
+      
+      // Log audit
+      AuditLogger.logUpdate('Tenant', tenant.id, 
+        `Dados da organização "${formData.nome}" atualizados`,
+        tenant.id, user
+      );
     } catch (error) {
       console.error('Error saving organization:', error);
       toast.error('Erro ao salvar organização');
