@@ -271,7 +271,7 @@ export default function Usuarios() {
             </CardContent>
           </Card>
 
-          <div className="mt-4 text-sm text-gray-500">
+          <div className="mt-4 text-sm" style={{ color: '#757575' }}>
             Total: {filteredUsuarios.length} usuários
           </div>
           </main>

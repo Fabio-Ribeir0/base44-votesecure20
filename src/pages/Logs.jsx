@@ -243,7 +243,7 @@ export default function Logs() {
             </CardContent>
           </Card>
 
-          <div className="mt-4 text-sm text-gray-500">
+          <div className="mt-4 text-sm" style={{ color: '#757575' }}>
             Mostrando {filteredLogs.length} registros
           </div>
         </main>
