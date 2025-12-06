@@ -78,7 +78,8 @@ export default function Checkin() {
       
       const membro = membrosEncontrados[0];
 
-      console.log('User email: ', user.Email);
+      console.log('User email: ', user.email);
+      console.log('User Email: ', user.Email);
       console.log('Member email: ', membro.email);
       console.log('Membro encontrado: ', membro);
 
