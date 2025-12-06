@@ -11,6 +11,7 @@ import Logs from './pages/Logs';
 import Procuracoes from './pages/Procuracoes';
 import PaymentSuccess from './pages/PaymentSuccess';
 import NotFound from './pages/NotFound';
+import VotacaoMembro from './pages/VotacaoMembro';
 import __Layout from './Layout.jsx';
 
 
@@ -28,6 +29,7 @@ export const PAGES = {
     "Procuracoes": Procuracoes,
     "PaymentSuccess": PaymentSuccess,
     "NotFound": NotFound,
+    "VotacaoMembro": VotacaoMembro,
 }
 
 export const pagesConfig = {
