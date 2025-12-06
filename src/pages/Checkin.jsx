@@ -71,22 +71,22 @@ export default function Checkin() {
         return;
       }
 
-      // Find member record by email directly
-      console.log('Buscando membro com tenant_id:', assembleiaData.tenant_id, 'e email:', user.email); // DEBUG
-      const membros = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id,
+      // Find member record using backend function to avoid tenant restrictions
+      console.log('Buscando membro com assembleia_id:', assembleiaData.id, 'e email:', user.email); // DEBUG
+      const memberResponse = await base44.functions.invoke('getMemberForCheckin', {
+        assembleia_id: assembleiaData.id,
         email: user.email
       });
-      console.log('Resultado da busca de membros:', membros); // DEBUG
+      console.log('Resultado da busca de membros:', memberResponse.data); // DEBUG
 
-      if (membros.length === 0) {
+      if (!memberResponse.data.member) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado. Entre em contato com o administrador.');
         setIsLoading(false);
         return;
       }
 
-      const membro = membros[0];
+      const membro = memberResponse.data.member;
 
       if (!membro.ativo) {
         setStatus('error');
