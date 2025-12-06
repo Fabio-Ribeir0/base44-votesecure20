@@ -78,6 +78,8 @@ export default function Checkin() {
         tenant_id: assembleiaData.tenant_id,
         email: user.email
       });
+
+      console.log('Resultado da busca de membros:', membrosEncontrados); // Mova esta linha para aqui.
       
       const membro = membrosEncontrados[0];
 
@@ -131,7 +133,6 @@ export default function Checkin() {
       setMessage('Erro ao processar check-in. Tente novamente.');
     } finally {
       setIsLoading(false);
-      console.log(`Email encontrado: ${membro.email}`);
     }
   };
 
