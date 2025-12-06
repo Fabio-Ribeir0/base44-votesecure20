@@ -72,32 +72,11 @@ export default function Checkin() {
 
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id/*,
-        email: user.email*/
+        tenant_id: assembleiaData.tenant_id,
+        email: user.email
       });
       
-      //const membro = membrosEncontrados[0];
-
-      //NOVO BLOCO DE CÓDIGO***********************************************
-
-      // Normalizar o email do usuário logado para comparação robusta
-      const normalizedUserEmail = user.email.toLowerCase().trim();
-
-      // Localizar o membro específico por email dentro da lista já obtida
-      const membro = membrosEncontrados.find(membro => {
-        // Normaliza o email de cada membro da lista para a comparação
-        const normalizedMembroEmail = membro.email.toLowerCase().trim();
-        return normalizedUserEmail === normalizedMembroEmail;
-      });
-
-      // Agora, 'membroEspecifico' conterá o objeto do membro se encontrado, ou 'undefined' se não for.
-      if (membro) {
-        console.log('Membro encontrado por email:', membro);
-      } else {
-        console.log('Membro com o email especificado não encontrado na assembleia.');
-      }
-
-      //NOVO BLOCO DE CÓDIGO***********************************************      
+      const membro = membrosEncontrados[0];
 
       if (!membro) {
         setStatus('error');
