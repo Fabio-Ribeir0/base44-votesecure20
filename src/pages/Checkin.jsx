@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { createPageUrl } from '@/utils';
 import { toast } from 'sonner';
 import { Shield, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -119,7 +120,12 @@ export default function Checkin() {
       );
 
       setStatus('success');
-      setMessage('Check-in realizado com sucesso!');
+      setMessage('Check-in realizado com sucesso! Você será redirecionado para a votação.');
+
+      // Redirect to voting page after 2 seconds
+      setTimeout(() => {
+        navigate(createPageUrl(`VotacaoMembro?assembleiaId=${assembleiaData.id}`));
+      }, 2000);
 
     } catch (error) {
       console.error('Error processing checkin:', error);
