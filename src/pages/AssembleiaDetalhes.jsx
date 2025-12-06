@@ -76,6 +76,13 @@ export default function AssembleiaDetalhes() {
 
   useEffect(() => {
     loadData();
+    
+    // Auto-refresh every 10 seconds to show updated checkins
+    const interval = setInterval(() => {
+      loadData();
+    }, 10000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const loadData = async () => {

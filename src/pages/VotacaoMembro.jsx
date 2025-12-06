@@ -23,7 +23,16 @@ export default function VotacaoMembro() {
 
   useEffect(() => {
     loadData();
-  }, []);
+    
+    // Auto-refresh every 5 seconds to show new/closed votações
+    const interval = setInterval(() => {
+      if (assembleia) {
+        loadVotacoesAbertas(assembleia.id);
+      }
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [assembleia]);
 
   const loadData = async () => {
     try {
