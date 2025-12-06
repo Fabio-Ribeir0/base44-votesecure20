@@ -70,18 +70,15 @@ export default function Checkin() {
         return;
       }
 
+      const userEmailAjustado = user.email.toLowerCase().trim();
+
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
-        email: user.email
+        email: userEmailAjustado//user.email
       });
       
       const membro = membrosEncontrados[0];
-
-      console.log('User email: ', user.email);
-      console.log('User Email: ', user.Email);
-      console.log('Member email: ', membro.email);
-      console.log('Membro encontrado: ', membro);
 
       if (!membro) {
         setStatus('error');
