@@ -70,12 +70,10 @@ export default function Checkin() {
         return;
       }
 
-      console.log(base44.entities.Membro);
-
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
-        email: user.email
+        email: user.email.toISOString()
       });
       
       const membro = membrosEncontrados[0];
