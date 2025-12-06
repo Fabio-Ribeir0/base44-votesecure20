@@ -72,20 +72,18 @@ export default function Checkin() {
       //console.log('Dados de busca para Membro:');
       //console.log('  tenant_id da Assembleia:', assembleiaData.tenant_id);
       console.log('  Email do usuário logado:', user.email);
+      console.log('Email do usuário (tentando com "e" minúsculo):', user.email);
+      console.log('Email do usuário (tentando com "E" maiúsculo):', user.Email); // Verifique este
 
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id/*,
-        email: user.email*/
+        tenant_id: assembleiaData.tenant_id,
+        email: user.Email
       });
 
       console.log('Resultado da busca de membros:', membrosEncontrados); // Mova esta linha para aqui.
       
       const membro = membrosEncontrados[0];
-
-      console.log('Tamanho das strings', user.email.length, ' ', membro.email.length);
-      console.log(typeof user.email);
-      console.log(typeof membro.email);
 
       if (!membro) {
         setStatus('error');
