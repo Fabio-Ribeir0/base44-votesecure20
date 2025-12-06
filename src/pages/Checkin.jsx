@@ -84,6 +84,8 @@ export default function Checkin() {
       const membro = membrosEncontrados[0];
 
       console.log('Tamanho das strings', user.email.length, ' ', membro.email.length);
+      console.log(typeof user.email);
+      console.log(typeof member.email);
 
       if (!membro) {
         setStatus('error');
