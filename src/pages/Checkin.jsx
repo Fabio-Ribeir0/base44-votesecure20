@@ -87,6 +87,12 @@ export default function Checkin() {
       
       const membro = membrosEncontrados[0];
 
+      if (user.email === membro.email){
+        console.log('IGUAL'); // Mova esta linha para aqui.
+      }else{
+        console.log('NÃO IGUAL'); // Mova esta linha para aqui.
+      }
+
       if (!membro) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado para esta assembleia. Verifique se o e-mail cadastrado corresponde ao seu e-mail de login ou entre em contato com o administrador.');
