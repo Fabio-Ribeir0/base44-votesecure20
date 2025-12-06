@@ -39,6 +39,7 @@ export default function Checkin() {
       }
 
       const user = await base44.auth.me();
+      console.log('Usuário logado:', user); // DEBUG
 
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
@@ -52,6 +53,7 @@ export default function Checkin() {
 
       const assembleiaData = assembleias[0];
       setAssembleia(assembleiaData);
+      console.log('Dados da Assembleia:', assembleiaData); // DEBUG
 
       // Check if assembleia is active
       if (!['Agendada', 'Em andamento'].includes(assembleiaData.status)) {
@@ -70,10 +72,12 @@ export default function Checkin() {
       }
 
       // Find member record by email directly
+      console.log('Buscando membro com tenant_id:', assembleiaData.tenant_id, 'e email:', user.email); // DEBUG
       const membros = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
         email: user.email
       });
+      console.log('Resultado da busca de membros:', membros); // DEBUG
 
       if (membros.length === 0) {
         setStatus('error');
