@@ -69,14 +69,15 @@ export default function Checkin() {
         return;
       }
 
-      console.log('Dados de busca para Membro:');
-      console.log('  tenant_id da Assembleia:', assembleiaData.tenant_id);
+      //console.log('Dados de busca para Membro:');
+      //console.log('  tenant_id da Assembleia:', assembleiaData.tenant_id);
       console.log('  Email do usuário logado:', user.email);
 
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
-        email: user.email.toLowerCase().trim()
+        nome_completo: 'Fabio Rodrigues Ribeiro'
+        //email: user.email
       });
 
       console.log('Resultado da busca de membros:', membrosEncontrados); // Mova esta linha para aqui.
