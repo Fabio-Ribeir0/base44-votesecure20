@@ -39,7 +39,6 @@ export default function Checkin() {
       }
 
       const user = await base44.auth.me();
-      console.log('Usuário logado:', user); // DEBUG
 
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
@@ -53,7 +52,6 @@ export default function Checkin() {
 
       const assembleiaData = assembleias[0];
       setAssembleia(assembleiaData);
-      console.log('Dados da Assembleia:', assembleiaData); // DEBUG
 
       // Check if assembleia is active
       if (!['Agendada', 'Em andamento'].includes(assembleiaData.status)) {
@@ -71,22 +69,31 @@ export default function Checkin() {
         return;
       }
 
-      // Find member record using backend function to avoid tenant restrictions
-      console.log('Buscando membro com assembleia_id:', assembleiaData.id, 'e email:', user.email); // DEBUG
-      const memberResponse = await base44.functions.invoke('getMemberForCheckin', {
-        assembleia_id: assembleiaData.id,
-        email: user.email
-      });
-      console.log('Resultado da busca de membros:', memberResponse.data); // DEBUG
+      // Find member by user's tenant
+      if (!user.tenant_id || user.tenant_id !== assembleiaData.tenant_id) {
+        setStatus('error');
+        setMessage('Você não é membro desta organização');
+        setIsLoading(false);
+        return;
+      }
 
-      if (!memberResponse.data.member) {
+      // Find member record
+      const membros = await base44.entities.Membro.filter({ 
+        tenant_id: assembleiaData.tenant_id 
+      });
+      
+      // Try to find member by email or by any criteria
+      const membro = membros.find(m => 
+        m.email === user.email || 
+        m.nome_completo?.toLowerCase() === user.full_name?.toLowerCase()
+      );
+
+      if (!membro) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado. Entre em contato com o administrador.');
         setIsLoading(false);
         return;
       }
-
-      const membro = memberResponse.data.member;
 
       if (!membro.ativo) {
         setStatus('error');
