@@ -74,6 +74,7 @@ export default function Checkin() {
         tenant_id: assembleiaData.tenant_id,
         email: user.email
       });
+      console.log(`user.email: ${email}`);
       
       const membro = membrosEncontrados[0];
 
