@@ -85,7 +85,7 @@ export default function Checkin() {
 
       console.log('Tamanho das strings', user.email.length, ' ', membro.email.length);
       console.log(typeof user.email);
-      console.log(typeof member.email);
+      console.log(typeof membro.email);
 
       if (!membro) {
         setStatus('error');
