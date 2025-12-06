@@ -69,31 +69,20 @@ export default function Checkin() {
         return;
       }
 
-      // Find member by user's tenant
-      if (!user.tenant_id || user.tenant_id !== assembleiaData.tenant_id) {
-        setStatus('error');
-        setMessage('Você não é membro desta organização');
-        setIsLoading(false);
-        return;
-      }
-
-      // Find member record
+      // Find member record by email directly
       const membros = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id 
+        tenant_id: assembleiaData.tenant_id,
+        email: user.email
       });
-      
-      // Try to find member by email or by any criteria
-      const membro = membros.find(m => 
-        m.email === user.email || 
-        m.nome_completo?.toLowerCase() === user.full_name?.toLowerCase()
-      );
 
-      if (!membro) {
+      if (membros.length === 0) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado. Entre em contato com o administrador.');
         setIsLoading(false);
         return;
       }
+
+      const membro = membros[0];
 
       if (!membro.ativo) {
         setStatus('error');
