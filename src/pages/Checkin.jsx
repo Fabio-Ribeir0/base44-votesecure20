@@ -127,7 +127,6 @@ export default function Checkin() {
       setMessage('Erro ao processar check-in. Tente novamente.');
     } finally {
       setIsLoading(false);
-      console.log(`user.email: ${email}`);
     }
   };
 
