@@ -56,6 +56,18 @@ export default function VotarModal({ open, onOpenChange, votacao, membroId, peso
 
     setIsLoading(true);
     try {
+      // Check if member has already voted
+      const existingVotes = await base44.entities.Voto.filter({ 
+        votacao_id: votacao.id,
+        membro_id: membroId
+      });
+
+      if (existingVotes.length > 0) {
+        toast.error('Você já votou nesta votação');
+        setIsLoading(false);
+        onOpenChange(false);
+        return;
+      }
       const votoData = {
         votacao_id: votacao.id,
         membro_id: membroId,
