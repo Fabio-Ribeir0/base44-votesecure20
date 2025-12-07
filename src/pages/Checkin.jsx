@@ -40,7 +40,7 @@ export default function Checkin() {
       }
 
       const user = await base44.auth.me();
-      const normalizedUserEmail = user.email.toLowercase().trim();
+      const normalizedUserEmail = user.email.toLowerCase().trim();
 
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
