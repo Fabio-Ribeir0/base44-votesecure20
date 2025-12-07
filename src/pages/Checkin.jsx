@@ -77,7 +77,8 @@ export default function Checkin() {
       });
       
       //const membro = membrosEncontrados[0];
-      const membros = membrosEncontrados; 
+      const membros = membrosEncontrados;
+      console.log('MembroS EncontradoS: ', membros);
 
       /* INÍCIO DE BLOCO ALTRADO */
 
