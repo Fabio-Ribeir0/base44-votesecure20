@@ -38,13 +38,7 @@ export default function VotacaoMembro() {
     try {
       const assembleiaId = searchParams.get('assembleiaId');
       
-      if (!assembleiaId) {
-        setError('ID da assembleia não fornecido');
-        setIsLoading(false);
-        return;
-      }
-
-      // Check authentication
+      // Check authentication first
       const isAuth = await base44.auth.isAuthenticated();
       if (!isAuth) {
         base44.auth.redirectToLogin(window.location.href);
@@ -53,6 +47,12 @@ export default function VotacaoMembro() {
 
       const userData = await base44.auth.me();
       setUser(userData);
+
+      if (!assembleiaId) {
+        setError('no_assembly');
+        setIsLoading(false);
+        return;
+      }
 
       // Load assembleia
       const assembleiaData = await base44.entities.Assembleia.get(assembleiaId);
@@ -150,6 +150,57 @@ export default function VotacaoMembro() {
   }
 
   if (error) {
+    // Friendly message when no assembly is provided
+    if (error === 'no_assembly') {
+      return (
+        <div 
+          className="min-h-screen flex items-center justify-center p-4"
+          style={{ background: 'linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 50%, #E3F2FD 100%)' }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full max-w-md"
+          >
+            <div className="flex items-center justify-center gap-2 mb-8">
+              <Shield className="w-10 h-10" style={{ color: '#1976D2' }} />
+              <span className="text-2xl font-bold" style={{ color: '#212121' }}>VoteSecure</span>
+            </div>
+
+            <Card 
+              style={{ 
+                backgroundColor: '#E3F2FD',
+                borderRadius: '12px',
+                border: '2px solid #90CAF9',
+                boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
+              }}
+            >
+              <CardContent className="p-8 text-center">
+                <CheckCircle className="w-16 h-16 mx-auto mb-4" style={{ color: '#1976D2' }} />
+                <h1 className="text-2xl font-bold mb-2" style={{ color: '#212121' }}>
+                  Bem-vindo ao VoteSecure!
+                </h1>
+                <p className="mb-2" style={{ color: '#212121' }}>
+                  Olá, <strong>{user?.full_name}</strong>
+                </p>
+                <p className="mb-6" style={{ color: '#757575' }}>
+                  Sua conta está ativa. Nenhuma assembleia ativa ou identificada no momento. 
+                  Aguarde convites para participar de assembleias e votações.
+                </p>
+                <Button 
+                  onClick={() => navigate(createPageUrl('Dashboard'))}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Acessar Dashboard
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      );
+    }
+
+    // Error messages for other cases
     return (
       <div 
         className="min-h-screen flex items-center justify-center p-4"

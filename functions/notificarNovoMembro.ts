@@ -19,8 +19,8 @@ Deno.serve(async (req) => {
     }
 
     // Get assembleia and QR code link if assembleia_id is provided
-    let qrCodeLink = 'https://app.base44.com/apps/693235c07ff5429bea488677/dashboard';
     let assembleiaInfo = null;
+    let qrCodeLink = null;
     
     if (assembleia_id) {
       const assembleias = await base44.asServiceRole.entities.Assembleia.filter({ id: assembleia_id });
@@ -255,9 +255,8 @@ Seguro, Transparente e Auditável`;
     console.log(`Usuário ${membro_email} não existe. Enviando e-mail de boas-vindas...`);
 
     // Prepare email content for new users
-    const signupLink = assembleiaInfo 
-      ? qrCodeLink 
-      : 'https://app.base44.com/apps/693235c07ff5429bea488677';
+    // For new users, always send to general signup page (they need to create account first)
+    const signupLink = 'https://app.base44.com/apps/693235c07ff5429bea488677';
 
     const emailText = assembleiaInfo
       ? `Olá ${membro_nome},
@@ -268,8 +267,7 @@ Para participar das assembleias e votações, você precisa criar sua conta na p
 
 📋 PASSO A PASSO PARA CRIAR SUA CONTA E PARTICIPAR:
 
-1. Acesse o link de check-in da assembleia:
-   ${qrCodeLink}
+1. Acesse: ${signupLink}
 
 2. Clique em "Criar Conta" ou "Sign Up"
 
@@ -282,7 +280,8 @@ Para participar das assembleias e votações, você precisa criar sua conta na p
 
 6. Confirme seu e-mail (você receberá um link de confirmação)
 
-7. Após criar sua conta, acesse novamente o link do passo 1 para fazer check-in e participar da assembleia
+7. Após criar sua conta, você receberá instruções para acessar a assembleia "${assembleiaInfo.nome}" ou use este link:
+   ${qrCodeLink}
 
 
 ⚠️ ATENÇÃO IMPORTANTE:
@@ -308,7 +307,7 @@ Para participar das assembleias e votações, você precisa criar sua conta na p
 
 📋 PASSO A PASSO PARA CRIAR SUA CONTA:
 
-1. Acesse: https://app.base44.com/apps/693235c07ff5429bea488677
+1. Acesse: ${signupLink}
 
 2. Clique em "Criar Conta" ou "Sign Up"
 
@@ -338,8 +337,7 @@ Entre em contato com a organização "${tenant_nome}".
 
 ---
 VoteSecure - Sistema de Votação Digital
-Seguro, Transparente e Auditável`;
-    `.trim();
+Seguro, Transparente e Auditável`.trim();
 
     const emailHtml = assembleiaInfo
       ? `<!DOCTYPE html>
@@ -358,6 +356,7 @@ Seguro, Transparente e Auditável`;
     .email-highlight { background: #e3f2fd; padding: 10px; border-radius: 4px; font-weight: bold; color: #1976D2; }
     .footer { text-align: center; padding: 20px; color: #757575; font-size: 12px; }
     .no-reply { background: #fff3e0; padding: 10px; border-radius: 4px; margin: 20px 0; text-align: center; color: #e65100; font-weight: bold; }
+    .link-box { background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; }
   </style>
 </head>
 <body>
@@ -369,22 +368,27 @@ Seguro, Transparente e Auditável`;
     <div class="content">
       <p>Olá <strong>${membro_nome}</strong>,</p>
       <p>Você foi cadastrado(a) como membro da assembleia <strong>"${assembleiaInfo.nome}"</strong> da organização <strong>"${tenant_nome}"</strong>.</p>
-      <p>Para participar, você precisa criar sua conta e fazer check-in na assembleia.</p>
+      <p>Para participar, você precisa criar sua conta na plataforma.</p>
       
       <div style="text-align: center;">
-        <a href="${qrCodeLink}" class="btn">🔗 Acessar Link da Assembleia</a>
+        <a href="${signupLink}" class="btn">🔗 Criar Minha Conta</a>
       </div>
 
       <div class="steps">
         <h3>📋 PASSO A PASSO PARA CRIAR SUA CONTA E PARTICIPAR:</h3>
-        <div class="step">1. Clique no botão acima ou acesse: <a href="${qrCodeLink}">${qrCodeLink}</a></div>
+        <div class="step">1. Clique no botão acima ou acesse: <a href="${signupLink}">${signupLink}</a></div>
         <div class="step">2. Clique em "Criar Conta" ou "Sign Up"</div>
         <div class="step">3. <strong>IMPORTANTE:</strong> Use o seguinte e-mail para se cadastrar:</div>
         <div class="email-highlight">✉️ ${membro_email}</div>
         <div class="step">4. Crie uma senha segura</div>
         <div class="step">5. Preencha seu nome completo</div>
         <div class="step">6. Confirme seu e-mail (você receberá um link de confirmação)</div>
-        <div class="step">7. Após criar sua conta, acesse novamente o link do passo 1 para fazer check-in e participar da assembleia</div>
+        <div class="step">7. Após criar sua conta, você receberá instruções para acessar a assembleia ou use este link:</div>
+      </div>
+
+      <div class="link-box">
+        <p style="margin: 0; font-size: 14px; color: #2e7d32;">🔗 <strong>Link da Assembleia (use após criar sua conta):</strong></p>
+        <p style="margin: 5px 0 0 0;"><a href="${qrCodeLink}" style="color: #1976D2; word-break: break-all;">${qrCodeLink}</a></p>
       </div>
 
       <div class="important">
