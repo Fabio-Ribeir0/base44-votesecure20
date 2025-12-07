@@ -216,8 +216,8 @@ Seguro, Transparente e Auditável`;
         const emailResult = await base44.functions.invoke('enviarEmailMailgun', {
           to: membro_email,
           subject: assembleiaInfo 
-            ? 'Você foi adicionado à assembleia - ' + tenant_nome
-            : 'Você foi adicionado à organização - ' + tenant_nome,
+            ? `Você foi adicionado à assembleia - ${tenant_nome}` 
+            : `Você foi adicionado à organização - ${tenant_nome}`,
           text: existingUserText,
           html: existingUserHtml
         });
@@ -340,7 +340,7 @@ VoteSecure - Sistema de Votação Digital
 Seguro, Transparente e Auditável`.trim();
 
     const emailHtml = assembleiaInfo
-      ? '<!DOCTYPE html>
+      ? `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -413,8 +413,8 @@ Seguro, Transparente e Auditável`.trim();
     </div>
   </div>
 </body>
-</html>'
-      : '<!DOCTYPE html>
+</html>`
+      : `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -475,18 +475,17 @@ Seguro, Transparente e Auditável`.trim();
     </div>
   </div>
 </body>
-</html>';
-    
-    const emailText_trimmed = emailText.trim();
+</html>`;
+    `.trim();
 
     try {
       // Use Mailgun to send email
       const emailResult = await base44.functions.invoke('enviarEmailMailgun', {
         to: membro_email,
         subject: assembleiaInfo 
-          ? 'Bem-vindo ao VoteSecure - Assembleia: ' + assembleiaInfo.nome
-          : 'Bem-vindo ao VoteSecure - ' + tenant_nome,
-        text: emailText_trimmed,
+          ? `Bem-vindo ao VoteSecure - Assembleia: ${assembleiaInfo.nome}` 
+          : `Bem-vindo ao VoteSecure - ${tenant_nome}`,
+        text: emailText,
         html: emailHtml
       });
 
