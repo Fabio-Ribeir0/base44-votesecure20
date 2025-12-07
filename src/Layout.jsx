@@ -204,53 +204,26 @@ export default function Layout({ children }) {
             animation: fadeInSmooth 0.3s ease-out;
           }
 
-          /* Select dropdown animation - slide down like a curtain */
-          @keyframes slideDown {
-            from {
-              opacity: 0;
-              transform: scaleY(0);
-              transform-origin: top;
-            }
-            to {
-              opacity: 1;
-              transform: scaleY(1);
-              transform-origin: top;
-            }
-          }
-
-          @keyframes slideUp {
-            from {
-              opacity: 1;
-              transform: scaleY(1);
-              transform-origin: top;
-            }
-            to {
-              opacity: 0;
-              transform: scaleY(0);
-              transform-origin: top;
-            }
-          }
-
-          /* Desabilitar TODAS as animações padrão do Radix Select */
+          /* Select dropdown animation - mesma dos modais */
           [data-radix-select-content] {
-            animation: slideDown 0.2s ease-out !important;
-            transform-origin: top !important;
+            animation: fadeInSmooth 0.3s ease-out !important;
           }
 
           [data-radix-select-content][data-state="open"] {
-            animation: slideDown 0.2s ease-out !important;
-            transform-origin: top !important;
+            animation: fadeInSmooth 0.3s ease-out !important;
           }
 
           [data-radix-select-content][data-state="closed"] {
-            animation: slideUp 0.2s ease-in !important;
-            transform-origin: top !important;
+            animation: fadeOut 0.2s ease-in !important;
           }
 
-          /* Remover animações baseadas em posição */
-          [data-radix-select-content][data-side] {
-            animation: slideDown 0.2s ease-out !important;
-            transform-origin: top !important;
+          @keyframes fadeOut {
+            from {
+              opacity: 1;
+            }
+            to {
+              opacity: 0;
+            }
           }
           
           /* Tooltip Styles */
