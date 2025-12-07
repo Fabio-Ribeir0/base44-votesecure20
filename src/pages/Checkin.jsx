@@ -78,6 +78,28 @@ export default function Checkin() {
       
       const membro = membrosEncontrados[0];
 
+//---------------------------------------------------------------------------------
+
+        if (user && user.email) {
+            const userEmailChars = Array.from(user.email).map(char => {
+            return { char: char, code: char.charCodeAt(0) };
+        });
+        console.log('user.email (caracteres e códigos decimais):', userEmailChars);
+        } else {
+            console.log('user.email não disponível.');
+        }
+
+        if (membro && membro.email) {
+            const membroEmailChars = Array.from(membro.email).map(char => {
+            return { char: char, code: char.charCodeAt(0) };
+        });
+        console.log('membro.email (caracteres e códigos decimais):', membroEmailChars);
+        } else {
+            console.log('membro.email não disponível.');
+        }
+
+//---------------------------------------------------------------------------------
+
       if (!membro) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado para esta assembleia. Verifique se o e-mail cadastrado corresponde ao seu e-mail de login ou entre em contato com o administrador.');
