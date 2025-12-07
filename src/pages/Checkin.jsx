@@ -40,6 +40,8 @@ export default function Checkin() {
       }
 
       const user = await base44.auth.me();
+      const newEmail = user.email;
+      console.log('New email: ', newEmail);
 
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
@@ -73,7 +75,7 @@ export default function Checkin() {
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
-        email: user.email
+        email: newEmail//user.email
       });
       
       const membro = membrosEncontrados[0];
