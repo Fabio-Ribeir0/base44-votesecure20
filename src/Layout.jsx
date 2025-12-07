@@ -218,17 +218,33 @@ export default function Layout({ children }) {
             }
           }
 
+          @keyframes slideUp {
+            from {
+              opacity: 1;
+              transform: scaleY(1);
+              transform-origin: top;
+            }
+            to {
+              opacity: 0;
+              transform: scaleY(0);
+              transform-origin: top;
+            }
+          }
+
+          /* Override all Radix UI Select animations */
           .animate-slideDown {
             animation: slideDown 0.2s ease-out !important;
+            transform-origin: top !important;
           }
 
-          /* Override Radix UI Select default animations */
           .animate-slideDown[data-state="open"] {
             animation: slideDown 0.2s ease-out !important;
+            transform-origin: top !important;
           }
 
-          .animate-slideDown[data-side] {
-            animation: slideDown 0.2s ease-out !important;
+          .animate-slideDown[data-state="closed"] {
+            animation: slideUp 0.2s ease-in !important;
+            transform-origin: top !important;
           }
           
           /* Tooltip Styles */
