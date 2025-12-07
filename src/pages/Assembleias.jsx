@@ -156,10 +156,13 @@ export default function Assembleias() {
               <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Assembleias</h1>
               <p style={{ color: '#757575' }}>Gerencie as assembleias da sua organização</p>
             </div>
-            <Button 
-              onClick={() => setShowAddModal(true)} 
-              className="text-white min-h-[44px] transition-all duration-200"
-              style={{ 
+
+
+
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className="text-white px-4 py-2 transition-all duration-200 flex items-center justify-center"
+              style={{
                 backgroundColor: '#1976D2',
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
@@ -176,6 +179,9 @@ export default function Assembleias() {
               <Plus className="w-4 h-4 mr-2" />
               Nova Assembleia
             </Button>
+
+
+
           </div>
 
           {/* Filters */}
