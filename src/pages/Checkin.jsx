@@ -40,7 +40,6 @@ export default function Checkin() {
       }
 
       const user = await base44.auth.me();
-      const normalizedUserEmail = user.email.toLowerCase().trim();
 
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
@@ -77,33 +76,7 @@ export default function Checkin() {
         email: user.email
       });
       
-      //const membro = membrosEncontrados[0];
-      const membro = membrosEncontrados;
-
-
-      
-
-      // 5. Usar o método find() para percorrer a lista e localizar o membro com o email desejado
-        const membroEncontrado = membrosEncontrados.find(membro => {
-        // Para cada 'membro' na lista, normalizamos o email dele para a comparação
-        const normalizedMembroEmail = membro.email.toLowerCase().trim();
-
-        // Comparamos o email normalizado do usuário com o email normalizado do membro
-        return normalizedUserEmail === normalizedMembroEmail;
-        })
-
-        // 6. Verificar o resultado
-        if (membroEncontrado) {
-        console.log('Membro encontrado por email (usando find()):', membroEncontrado);
-        // Agora você pode usar a variável 'membroEncontrado' para o que precisar.
-        // Por exemplo: console.log('Nome do membro:', membroEncontrado.nome_completo);
-        } else {
-        console.log('Membro com o email especificado não encontrado na assembleia.');
-        // Lógica para quando o membro não é encontrado (ex: exibir mensagem de erro, redirecionar, etc.)
-        }
-        console.log(typeof membroEncontrado);
-
-
+      const membro = membrosEncontrados[0];
 
       if (!membro) {
         setStatus('error');
