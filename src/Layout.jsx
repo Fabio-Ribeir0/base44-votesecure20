@@ -178,7 +178,7 @@ export default function Layout({ children }) {
           [data-state="open"][role="dialog"] {
             animation: fadeIn 0.2s ease-out;
           }
-          
+
           @keyframes fadeIn {
             from {
               opacity: 0;
@@ -188,6 +188,20 @@ export default function Layout({ children }) {
               opacity: 1;
               transform: scale(1);
             }
+          }
+
+          /* Smooth fade-in without movement */
+          @keyframes fadeInSmooth {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+
+          .modal-smooth-fade[data-state="open"] {
+            animation: fadeInSmooth 0.3s ease-out;
           }
           
           /* Tooltip Styles */
