@@ -216,8 +216,8 @@ Seguro, Transparente e Auditável`;
         const emailResult = await base44.functions.invoke('enviarEmailMailgun', {
           to: membro_email,
           subject: assembleiaInfo 
-            ? `Você foi adicionado à assembleia - ${tenant_nome}` 
-            : `Você foi adicionado à organização - ${tenant_nome}`,
+            ? 'Você foi adicionado à assembleia - ' + tenant_nome
+            : 'Você foi adicionado à organização - ' + tenant_nome,
           text: existingUserText,
           html: existingUserHtml
         });
@@ -476,16 +476,17 @@ Seguro, Transparente e Auditável`.trim();
   </div>
 </body>
 </html>`;
-    `.trim();
+    
+    const emailText_trimmed = emailText.trim();
 
     try {
       // Use Mailgun to send email
       const emailResult = await base44.functions.invoke('enviarEmailMailgun', {
         to: membro_email,
         subject: assembleiaInfo 
-          ? `Bem-vindo ao VoteSecure - Assembleia: ${assembleiaInfo.nome}` 
-          : `Bem-vindo ao VoteSecure - ${tenant_nome}`,
-        text: emailText,
+          ? 'Bem-vindo ao VoteSecure - Assembleia: ' + assembleiaInfo.nome
+          : 'Bem-vindo ao VoteSecure - ' + tenant_nome,
+        text: emailText_trimmed,
         html: emailHtml
       });
 
