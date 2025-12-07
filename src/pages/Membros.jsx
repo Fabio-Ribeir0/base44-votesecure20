@@ -155,38 +155,7 @@ export default function Membros() {
         <DashboardHeader user={user} tenant={tenant} />
         
         <main className="p-4 lg:p-6">
-          /*<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Membros</h1>
-              <p style={{ color: '#757575' }}>Gerencie os membros da sua organização</p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setShowImportModal(true)}>
-                <Upload className="w-4 h-4 mr-2" />
-                Importar CSV
-              </Button>
-              <Button 
-              onClick={() => setShowAddModal(true)} 
-              className="text-white min-h-[44px] transition-all duration-200"
-              style={{ 
-                backgroundColor: '#1976D2',
-                borderRadius: '8px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#1565C0';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#1976D2';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Membro
-              </Button>
-            </div>
-          </div>*/
+
 
 
 
