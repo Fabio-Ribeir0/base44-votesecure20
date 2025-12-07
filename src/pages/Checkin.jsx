@@ -40,7 +40,7 @@ export default function Checkin() {
       }
 
       const user = await base44.auth.me();
-      const newEmail = user.email;
+      const newEmail = user.email.toLowerCase().trim();
       console.log('New email: ', newEmail);
 
       // Find assembleia by token
