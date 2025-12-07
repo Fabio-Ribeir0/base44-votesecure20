@@ -28,6 +28,7 @@ Deno.serve(async (req) => {
         assembleiaInfo = assembleias[0];
         qrCodeLink = `https://votesecure.minimind.com.br/checkin?token=${assembleiaInfo.qr_code_checkin_token}`;
       }
+      }
     }
 
     console.log(`Verificando se ${membro_email} já é usuário do sistema...`);
