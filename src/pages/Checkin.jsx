@@ -41,6 +41,8 @@ export default function Checkin() {
 
       const user = await base44.auth.me();
 
+      console.log('user= ', user);
+
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
       
