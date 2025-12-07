@@ -566,7 +566,7 @@ export default function AssembleiaDetalhes() {
 
       {/* QR Code Modal */}
       <Dialog open={showQRModal} onOpenChange={setShowQRModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="modal-smooth-fade sm:max-w-md">
           <DialogHeader>
             <DialogTitle>QR Code para Check-in</DialogTitle>
           </DialogHeader>
@@ -598,7 +598,7 @@ export default function AssembleiaDetalhes() {
 
       {/* Manual Checkin Modal */}
       <Dialog open={showCheckinModal} onOpenChange={setShowCheckinModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="modal-smooth-fade sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Check-in Manual</DialogTitle>
           </DialogHeader>
