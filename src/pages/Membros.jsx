@@ -382,6 +382,7 @@ export default function Membros() {
         }}
         member={editingMember}
         tenantId={tenant?.id}
+        tenantNome={tenant?.nome}
         user={user}
         onSuccess={() => {
           setShowAddModal(false);
