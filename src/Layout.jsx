@@ -176,17 +176,17 @@ export default function Layout({ children }) {
           
           /* Modal Backdrop */
           [data-state="open"][role="dialog"] {
-            animation: modalEnter 0.2s ease-out;
+            animation: fadeIn 0.2s ease-out;
           }
-
-          @keyframes modalEnter {
+          
+          @keyframes fadeIn {
             from {
               opacity: 0;
-              transform: scale(1.05) translateY(10px);
+              transform: scale(0.95);
             }
             to {
               opacity: 1;
-              transform: scale(1) translateY(0);
+              transform: scale(1);
             }
           }
           
