@@ -41,8 +41,6 @@ export default function Checkin() {
 
       const user = await base44.auth.me();
 
-      console.log('user= ', user);
-
       // Find assembleia by token
       const assembleias = await base44.entities.Assembleia.filter({ qr_code_checkin_token: token });
       
@@ -79,6 +77,9 @@ export default function Checkin() {
       });
       
       const membro = membrosEncontrados[0];
+
+      console.log('user= ', user);
+      console.log('membro= ', membro);
 
       if (!membro) {
         setStatus('error');
