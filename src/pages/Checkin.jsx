@@ -101,7 +101,7 @@ export default function Checkin() {
         console.log('Membro com o email especificado não encontrado na assembleia.');
         // Lógica para quando o membro não é encontrado (ex: exibir mensagem de erro, redirecionar, etc.)
         }
-        console.log(membroEncontrado);
+        console.log(typeof membroEncontrado);
 
 
 
