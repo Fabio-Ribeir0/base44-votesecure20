@@ -203,6 +203,24 @@ export default function Layout({ children }) {
           .modal-smooth-fade[data-state="open"] {
             animation: fadeInSmooth 0.3s ease-out;
           }
+
+          /* Select dropdown animation - slide down like a curtain */
+          @keyframes slideDown {
+            from {
+              opacity: 0;
+              transform: scaleY(0);
+              transform-origin: top;
+            }
+            to {
+              opacity: 1;
+              transform: scaleY(1);
+              transform-origin: top;
+            }
+          }
+
+          .animate-slideDown {
+            animation: slideDown 0.2s ease-out;
+          }
           
           /* Tooltip Styles */
           [role="tooltip"] {

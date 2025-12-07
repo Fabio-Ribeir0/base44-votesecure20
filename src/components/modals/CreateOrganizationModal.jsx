@@ -23,6 +23,10 @@ const TIPOS_ORGANIZACAO = [
   'Igreja',
   'Empresa',
   'Associação',
+  'Cooperativa',
+  'Sindicato',
+  'Escola/Instituição Educacional',
+  'Clube/Sociedade Recreativa',
   'Outro'
 ];
 
@@ -69,7 +73,7 @@ export default function CreateOrganizationModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="modal-smooth-fade sm:max-w-lg">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -117,7 +121,7 @@ export default function CreateOrganizationModal({
               <SelectTrigger className={errors.tipo_organizacao ? 'border-red-500' : ''}>
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="animate-slideDown">
                 {TIPOS_ORGANIZACAO.map(tipo => (
                   <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
                 ))}
