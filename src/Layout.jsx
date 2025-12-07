@@ -231,29 +231,24 @@ export default function Layout({ children }) {
             }
           }
 
-          /* Override all Radix UI Select animations */
-          .animate-slideDown {
-            animation: slideDown 0.2s ease-out !important;
-            transform-origin: top !important;
-            /* Remove default Radix animations */
-            --radix-select-content-transform-origin: top !important;
-          }
-
-          .animate-slideDown[data-state="open"] {
+          /* Desabilitar TODAS as animações padrão do Radix Select */
+          [data-radix-select-content] {
             animation: slideDown 0.2s ease-out !important;
             transform-origin: top !important;
           }
 
-          .animate-slideDown[data-state="closed"] {
+          [data-radix-select-content][data-state="open"] {
+            animation: slideDown 0.2s ease-out !important;
+            transform-origin: top !important;
+          }
+
+          [data-radix-select-content][data-state="closed"] {
             animation: slideUp 0.2s ease-in !important;
             transform-origin: top !important;
           }
 
-          /* Force remove any side-based animations from Radix */
-          .animate-slideDown[data-side="top"],
-          .animate-slideDown[data-side="bottom"],
-          .animate-slideDown[data-side="left"],
-          .animate-slideDown[data-side="right"] {
+          /* Remover animações baseadas em posição */
+          [data-radix-select-content][data-side] {
             animation: slideDown 0.2s ease-out !important;
             transform-origin: top !important;
           }
