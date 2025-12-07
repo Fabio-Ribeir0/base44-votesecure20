@@ -191,7 +191,7 @@ export default function VotacaoMembro() {
                   onClick={() => navigate(createPageUrl('Dashboard'))}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  Acessar Dashboard
+                  Conheça VoteSecure
                 </Button>
               </CardContent>
             </Card>
