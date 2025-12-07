@@ -121,7 +121,7 @@ export default function CreateOrganizationModal({
               <SelectTrigger className={errors.tipo_organizacao ? 'border-red-500' : ''}>
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent modal-smooth-fade>
                 {TIPOS_ORGANIZACAO.map(tipo => (
                   <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
                 ))}
