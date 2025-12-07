@@ -235,6 +235,8 @@ export default function Layout({ children }) {
           .animate-slideDown {
             animation: slideDown 0.2s ease-out !important;
             transform-origin: top !important;
+            /* Remove default Radix animations */
+            --radix-select-content-transform-origin: top !important;
           }
 
           .animate-slideDown[data-state="open"] {
@@ -244,6 +246,15 @@ export default function Layout({ children }) {
 
           .animate-slideDown[data-state="closed"] {
             animation: slideUp 0.2s ease-in !important;
+            transform-origin: top !important;
+          }
+
+          /* Force remove any side-based animations from Radix */
+          .animate-slideDown[data-side="top"],
+          .animate-slideDown[data-side="bottom"],
+          .animate-slideDown[data-side="left"],
+          .animate-slideDown[data-side="right"] {
+            animation: slideDown 0.2s ease-out !important;
             transform-origin: top !important;
           }
           
