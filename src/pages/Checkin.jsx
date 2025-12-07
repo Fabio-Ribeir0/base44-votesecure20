@@ -76,10 +76,29 @@ export default function Checkin() {
         email: user.email*/
       });
       
-      const membro = membrosEncontrados[0];
+      //const membro = membrosEncontrados[0];
+      const membro = membrosEncontrados; 
 
-      console.log('user= ', user);
-      console.log('membro= ', membro);
+      /* INÍCIO DE BLOCO ALTRADO */
+
+      // 2. Normalizar o email do usuário logado para comparação robusta
+      const normalizedUserEmail = user.email.toLowerCase().trim();
+
+      // 3. Localizar o membro específico por email dentro da lista já obtida
+      const membroEspecifico = membrosEncontrados.find(membro => {
+        // Normaliza o email de cada membro da lista para a comparação
+        const normalizedMembroEmail = membro.email.toLowerCase().trim();
+        return normalizedUserEmail === normalizedMembroEmail;
+      });
+
+      // Agora, 'membroEspecifico' conterá o objeto do membro se encontrado, ou 'undefined' se não for.
+      if (membroEspecifico) {
+        console.log('Membro encontrado por email:', membroEspecifico);
+      } else {
+        console.log('Membro com o email especificado não encontrado na assembleia.');
+      }
+
+      /* FIM DE BLOCO ALTRADO */
 
       if (!membro) {
         setStatus('error');
