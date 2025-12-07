@@ -204,17 +204,23 @@ export default function Layout({ children }) {
             animation: fadeInSmooth 0.3s ease-out;
           }
 
-          /* Select dropdown animation - mesma dos modais */
-          [data-radix-select-content] {
+          /* Select dropdown - APENAS fade, sem movimento */
+          [data-radix-select-content],
+          [role="listbox"] {
             animation: fadeInSmooth 0.3s ease-out !important;
+            transform: none !important;
           }
 
-          [data-radix-select-content][data-state="open"] {
+          [data-radix-select-content][data-state="open"],
+          [role="listbox"][data-state="open"] {
             animation: fadeInSmooth 0.3s ease-out !important;
+            transform: none !important;
           }
 
-          [data-radix-select-content][data-state="closed"] {
+          [data-radix-select-content][data-state="closed"],
+          [role="listbox"][data-state="closed"] {
             animation: fadeOut 0.2s ease-in !important;
+            transform: none !important;
           }
 
           @keyframes fadeOut {
