@@ -66,7 +66,7 @@ export default function VotacaoMembro() {
       // Validate member
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
-        email: userData.Email
+        email: userData.email
       });
       
       const membroData = membrosEncontrados[0];
