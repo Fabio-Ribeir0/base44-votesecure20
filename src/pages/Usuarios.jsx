@@ -143,10 +143,10 @@ export default function Usuarios() {
               <h1 className="text-2xl font-bold" style={{ color: '#212121' }}>Usuários e Permissões</h1>
               <p style={{ color: '#757575' }}>Gerencie os usuários e seus perfis de acesso</p>
             </div>
-            <Button 
-              onClick={() => setShowConviteModal(true)} 
-              className="text-white min-h-[44px] transition-all duration-200"
-              style={{ 
+            <Button
+              onClick={() => setShowConviteModal(true)}
+              className="text-white px-4 py-2 transition-all duration-200 flex items-center justify-center"
+              style={{
                 backgroundColor: '#1976D2',
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
