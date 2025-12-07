@@ -23,6 +23,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
@@ -68,7 +69,8 @@ export default function AssembleiaDetalhes() {
   
   const [showQRModal, setShowQRModal] = useState(false);
   const [showCheckinModal, setShowCheckinModal] = useState(false);
-  const [selectedMembro, setSelectedMembro] = useState('');
+  const [selectedMembros, setSelectedMembros] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [showVotacaoModal, setShowVotacaoModal] = useState(false);
   const [editingVotacao, setEditingVotacao] = useState(null);
   const [votandoEm, setVotandoEm] = useState(null);
@@ -176,39 +178,74 @@ export default function AssembleiaDetalhes() {
   };
 
   const handleManualCheckin = async () => {
-    if (!selectedMembro) return;
+    if (selectedMembros.length === 0) return;
 
     try {
-      // Check if already checked in
-      const existing = checkins.find(c => c.membro_id === selectedMembro);
-      if (existing) {
-        toast.error('Este membro já fez check-in');
-        return;
+      let successCount = 0;
+      let alreadyCheckedCount = 0;
+
+      for (const membroId of selectedMembros) {
+        // Check if already checked in
+        const existing = checkins.find(c => c.membro_id === membroId);
+        if (existing) {
+          alreadyCheckedCount++;
+          continue;
+        }
+
+        await base44.entities.CheckIn.create({
+          assembleia_id: assembleia.id,
+          membro_id: membroId,
+          data_hora: new Date().toISOString(),
+          metodo: 'Manual',
+          realizado_por: user.id
+        });
+
+        // Log audit
+        const membroSelecionado = membros.find(m => m.id === membroId);
+        AuditLogger.logCheckin(assembleia.id, 
+          `Check-in manual de "${membroSelecionado?.nome_completo}" na assembleia "${assembleia.nome}"`,
+          tenant.id, user
+        );
+
+        successCount++;
       }
 
-      await base44.entities.CheckIn.create({
-        assembleia_id: assembleia.id,
-        membro_id: selectedMembro,
-        data_hora: new Date().toISOString(),
-        metodo: 'Manual',
-        realizado_por: user.id
-      });
+      if (successCount > 0) {
+        toast.success(`Check-in de ${successCount} membro${successCount > 1 ? 's' : ''} realizado com sucesso!`);
+      }
+      if (alreadyCheckedCount > 0) {
+        toast.info(`${alreadyCheckedCount} membro${alreadyCheckedCount > 1 ? 's já estavam' : ' já estava'} com check-in`);
+      }
 
-      // Log audit
-      const membroSelecionado = membros.find(m => m.id === selectedMembro);
-      AuditLogger.logCheckin(assembleia.id, 
-        `Check-in manual de "${membroSelecionado?.nome_completo}" na assembleia "${assembleia.nome}"`,
-        tenant.id, user
-      );
-
-      toast.success('Check-in realizado com sucesso!');
       setShowCheckinModal(false);
-      setSelectedMembro('');
+      setSelectedMembros([]);
+      setSearchQuery('');
       loadData();
     } catch (error) {
       console.error('Error creating checkin:', error);
       toast.error('Erro ao realizar check-in');
     }
+  };
+
+  const toggleMembroSelection = (membroId) => {
+    setSelectedMembros(prev => 
+      prev.includes(membroId) 
+        ? prev.filter(id => id !== membroId)
+        : [...prev, membroId]
+    );
+  };
+
+  const getFilteredMembrosForCheckin = () => {
+    return membros
+      .filter(m => !getMemberCheckinStatus(m.id))
+      .filter(m => {
+        if (!searchQuery) return true;
+        const search = searchQuery.toLowerCase();
+        return (
+          m.nome_completo?.toLowerCase().includes(search) ||
+          m.email?.toLowerCase().includes(search)
+        );
+      });
   };
 
   const getCheckinUrl = () => {
@@ -597,39 +634,83 @@ export default function AssembleiaDetalhes() {
       </Dialog>
 
       {/* Manual Checkin Modal */}
-      <Dialog open={showCheckinModal} onOpenChange={setShowCheckinModal}>
+      <Dialog open={showCheckinModal} onOpenChange={(open) => {
+        setShowCheckinModal(open);
+        if (!open) {
+          setSelectedMembros([]);
+          setSearchQuery('');
+        }
+      }}>
         <DialogContent className="modal-smooth-fade sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Check-in Manual</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Selecione o membro</label>
-              <Select value={selectedMembro} onValueChange={setSelectedMembro}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um membro" />
-                </SelectTrigger>
-                <SelectContent>
-                  {membros
-                    .filter(m => !getMemberCheckinStatus(m.id))
-                    .map(membro => (
-                      <SelectItem key={membro.id} value={membro.id}>
-                        {membro.nome_completo}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-medium">Buscar membro</label>
+              <Input
+                placeholder="Buscar por nome ou email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
             </div>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setShowCheckinModal(false)} className="flex-1">
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium">
+                Selecione os membros ({getFilteredMembrosForCheckin().length} disponíveis)
+              </label>
+              <div className="border rounded-lg max-h-[280px] overflow-y-auto">
+                {getFilteredMembrosForCheckin().length === 0 ? (
+                  <div className="p-4 text-center text-gray-500 text-sm">
+                    Nenhum membro disponível para check-in
+                  </div>
+                ) : (
+                  <div className="divide-y">
+                    {getFilteredMembrosForCheckin().map(membro => (
+                      <label
+                        key={membro.id}
+                        className="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedMembros.includes(membro.id)}
+                          onChange={() => toggleMembroSelection(membro.id)}
+                          className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm text-gray-900 truncate">
+                            {membro.nome_completo}
+                          </p>
+                          {membro.email && (
+                            <p className="text-xs text-gray-500 truncate">{membro.email}</p>
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowCheckinModal(false);
+                  setSelectedMembros([]);
+                  setSearchQuery('');
+                }} 
+                className="flex-1"
+              >
                 Cancelar
               </Button>
               <Button 
                 onClick={handleManualCheckin} 
-                disabled={!selectedMembro}
+                disabled={selectedMembros.length === 0}
                 className="flex-1 bg-blue-600 hover:bg-blue-700"
               >
-                Confirmar Check-in
+                Check-in de {selectedMembros.length} membro{selectedMembros.length !== 1 ? 's' : ''}
               </Button>
             </div>
           </div>
