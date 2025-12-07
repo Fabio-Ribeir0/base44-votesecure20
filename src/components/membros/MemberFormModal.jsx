@@ -23,7 +23,7 @@ import { AuditLogger } from '@/components/audit/AuditLogger';
 
 const TIPOS_MEMBRO = ['Proprietário', 'Inquilino', 'Representante', 'Outro'];
 
-export default function MemberFormModal({ open, onOpenChange, member, tenantId, onSuccess, user }) {
+export default function MemberFormModal({ open, onOpenChange, member, tenantId, tenantNome, onSuccess, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     nome_completo: '',
@@ -110,6 +110,27 @@ export default function MemberFormModal({ open, onOpenChange, member, tenantId, 
             `Membro "${formData.nome_completo}" cadastrado`,
             tenantId, user
           );
+        }
+
+        // Send welcome email if member has email and is new user
+        if (formData.email && tenantNome) {
+          try {
+            const emailResult = await base44.functions.invoke('notificarNovoMembro', {
+              membro_email: formData.email,
+              membro_nome: formData.nome_completo,
+              tenant_nome: tenantNome,
+              tenant_id: tenantId
+            });
+            
+            if (emailResult.data?.email_sent) {
+              toast.success('E-mail de boas-vindas enviado!', { duration: 3000 });
+            } else if (emailResult.data?.user_exists) {
+              console.log('Usuário já existe no sistema, e-mail não enviado');
+            }
+          } catch (emailError) {
+            console.error('Erro ao enviar e-mail de boas-vindas:', emailError);
+            // Não mostra erro ao usuário, apenas loga
+          }
         }
       }
       onSuccess();
