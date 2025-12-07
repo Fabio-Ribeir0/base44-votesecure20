@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
       const assembleias = await base44.asServiceRole.entities.Assembleia.filter({ id: assembleia_id });
       if (assembleias.length > 0) {
         assembleiaInfo = assembleias[0];
-        qrCodeLink = `https://app.base44.com/apps/693235c07ff5429bea488677/checkin?token=${assembleiaInfo.qr_code_checkin_token}`;
+        qrCodeLink = `https://votesecure.minimind.com.br/checkin?token=${assembleiaInfo.qr_code_checkin_token}`;
       }
     }
 
@@ -79,7 +79,7 @@ Você foi adicionado(a) como membro da organização "${tenant_nome}" no sistema
 
 Para acessar o sistema e participar das assembleias, use o link abaixo:
 
-🔗 Acesse: https://app.base44.com/apps/693235c07ff5429bea488677/dashboard
+🔗 Acesse: https://votesecure.minimind.com.br/votacaomembro
 
 Use o e-mail cadastrado para fazer login:
 ✉️ ${membro_email}
@@ -190,7 +190,7 @@ Seguro, Transparente e Auditável`;
       </div>
 
       <div style="text-align: center;">
-        <a href="https://app.base44.com/apps/693235c07ff5429bea488677/dashboard" class="btn">🔗 Acessar VoteSecure</a>
+        <a href="https://votesecure.minimind.com.br/votacaomembro" class="btn">🔗 Acessar VoteSecure</a>
       </div>
 
       <div class="email-highlight" style="margin: 20px 0; text-align: center;">
@@ -256,7 +256,7 @@ Seguro, Transparente e Auditável`;
 
     // Prepare email content for new users
     // For new users, always send to general signup page (they need to create account first)
-    const signupLink = 'https://app.base44.com/apps/693235c07ff5429bea488677';
+    const signupLink = 'https://votesecure.minimind.com.br/votacaomembro';
 
     const emailText = assembleiaInfo
       ? `Olá ${membro_nome},
@@ -443,7 +443,7 @@ Seguro, Transparente e Auditável`.trim();
       
       <div class="steps">
         <h3>📋 PASSO A PASSO PARA CRIAR SUA CONTA:</h3>
-        <div class="step">1. Acesse: <a href="https://app.base44.com/apps/693235c07ff5429bea488677">https://app.base44.com/apps/693235c07ff5429bea488677</a></div>
+        <div class="step">1. Acesse: <a href="${signupLink}">${signupLink}</a></div>
         <div class="step">2. Clique em "Criar Conta" ou "Sign Up"</div>
         <div class="step">3. <strong>IMPORTANTE:</strong> Use o seguinte e-mail para se cadastrar:</div>
         <div class="email-highlight">✉️ ${membro_email}</div>
