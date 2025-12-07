@@ -134,7 +134,7 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="modal-smooth-fade sm:max-w-lg">
         <DialogHeader>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
