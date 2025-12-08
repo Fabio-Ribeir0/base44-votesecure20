@@ -204,32 +204,31 @@ export default function Layout({ children }) {
             animation: fadeInSmooth 0.3s ease-out;
           }
 
-          /* Select dropdown - APENAS fade, sem movimento */
-          [data-radix-select-content],
-          [role="listbox"] {
-            animation: fadeInSmooth 0.3s ease-out !important;
-            transform: none !important;
-          }
-
-          [data-radix-select-content][data-state="open"],
-          [role="listbox"][data-state="open"] {
-            animation: fadeInSmooth 0.3s ease-out !important;
-            transform: none !important;
-          }
-
-          [data-radix-select-content][data-state="closed"],
-          [role="listbox"][data-state="closed"] {
-            animation: fadeOut 0.2s ease-in !important;
-            transform: none !important;
-          }
-
-          @keyframes fadeOut {
+          /* Select dropdown animation - slide down like a curtain */
+          @keyframes slideDown {
             from {
-              opacity: 1;
+              opacity: 0;
+              transform: scaleY(0);
+              transform-origin: top;
             }
             to {
-              opacity: 0;
+              opacity: 1;
+              transform: scaleY(1);
+              transform-origin: top;
             }
+          }
+
+          .animate-slideDown {
+            animation: slideDown 0.2s ease-out !important;
+          }
+
+          /* Override Radix UI Select default animations */
+          .animate-slideDown[data-state="open"] {
+            animation: slideDown 0.2s ease-out !important;
+          }
+
+          .animate-slideDown[data-side] {
+            animation: slideDown 0.2s ease-out !important;
           }
           
           /* Tooltip Styles */
