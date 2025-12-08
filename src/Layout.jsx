@@ -219,16 +219,7 @@ export default function Layout({ children }) {
           }
 
           .animate-slideDown {
-            animation: slideDown 0.2s ease-out !important;
-          }
-
-          /* Override Radix UI Select default animations */
-          .animate-slideDown[data-state="open"] {
-            animation: slideDown 0.2s ease-out !important;
-          }
-
-          .animate-slideDown[data-side] {
-            animation: slideDown 0.2s ease-out !important;
+            animation: slideDown 0.2s ease-out;
           }
           
           /* Tooltip Styles */
