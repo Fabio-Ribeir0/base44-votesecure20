@@ -174,11 +174,23 @@ export default function Layout({ children }) {
             }
           }
           
-          /* ============================================
-             ANIMAÇÕES PADRONIZADAS DO SISTEMA
-             ============================================ */
+          /* Modal Backdrop */
+          [data-state="open"][role="dialog"] {
+            animation: fadeIn 0.2s ease-out;
+          }
 
-          /* Fade suave sem movimento (modais, dialogs, popups) */
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: scale(1);
+            }
+          }
+
+          /* Smooth fade-in without movement */
           @keyframes fadeInSmooth {
             from {
               opacity: 0;
@@ -188,6 +200,29 @@ export default function Layout({ children }) {
             }
           }
 
+          .modal-smooth-fade[data-state="open"] {
+            animation: fadeInSmooth 0.3s ease-out;
+          }
+
+          /* Select dropdown - APENAS fade, sem movimento */
+          [data-radix-select-content],
+          [role="listbox"] {
+            animation: fadeInSmooth 0.3s ease-out !important;
+            transform: none !important;
+          }
+
+          [data-radix-select-content][data-state="open"],
+          [role="listbox"][data-state="open"] {
+            animation: fadeInSmooth 0.3s ease-out !important;
+            transform: none !important;
+          }
+
+          [data-radix-select-content][data-state="closed"],
+          [role="listbox"][data-state="closed"] {
+            animation: fadeOut 0.2s ease-in !important;
+            transform: none !important;
+          }
+
           @keyframes fadeOut {
             from {
               opacity: 1;
@@ -195,76 +230,6 @@ export default function Layout({ children }) {
             to {
               opacity: 0;
             }
-          }
-
-          /* Desenrolar de cima (listas de seleção) */
-          @keyframes slideDownFromTop {
-            from {
-              opacity: 0;
-              transform: translateY(-10px) scaleY(0.95);
-              transform-origin: top center;
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0) scaleY(1);
-              transform-origin: top center;
-            }
-          }
-
-          @keyframes slideUpToTop {
-            from {
-              opacity: 1;
-              transform: translateY(0) scaleY(1);
-              transform-origin: top center;
-            }
-            to {
-              opacity: 0;
-              transform: translateY(-10px) scaleY(0.95);
-              transform-origin: top center;
-            }
-          }
-
-          /* ============================================
-             APLICAÇÃO DAS ANIMAÇÕES
-             ============================================ */
-
-          /* Modais e Dialogs - apenas fade suave */
-          [data-state="open"][role="dialog"],
-          .modal-smooth-fade[data-state="open"],
-          [data-radix-dialog-content][data-state="open"],
-          [data-radix-alert-dialog-content][data-state="open"] {
-            animation: fadeInSmooth 0.3s ease-out !important;
-          }
-
-          /* Listas de Seleção - desenrolar de cima */
-          [data-radix-select-content][data-state="open"],
-          [role="listbox"][data-state="open"],
-          [data-radix-popper-content][data-state="open"] {
-            animation: slideDownFromTop 0.25s ease-out !important;
-          }
-
-          [data-radix-select-content][data-state="closed"],
-          [role="listbox"][data-state="closed"],
-          [data-radix-popper-content][data-state="closed"] {
-            animation: slideUpToTop 0.2s ease-in !important;
-          }
-
-          /* Dropdown menus - desenrolar de cima */
-          [data-radix-dropdown-menu-content][data-state="open"] {
-            animation: slideDownFromTop 0.25s ease-out !important;
-          }
-
-          [data-radix-dropdown-menu-content][data-state="closed"] {
-            animation: slideUpToTop 0.2s ease-in !important;
-          }
-
-          /* Context menus - desenrolar de cima */
-          [data-radix-context-menu-content][data-state="open"] {
-            animation: slideDownFromTop 0.25s ease-out !important;
-          }
-
-          [data-radix-context-menu-content][data-state="closed"] {
-            animation: slideUpToTop 0.2s ease-in !important;
           }
           
           /* Tooltip Styles */
