@@ -233,38 +233,29 @@ export default function Layout({ children }) {
           .modal-smooth-fade[data-state="open"],
           [data-radix-dialog-content][data-state="open"],
           [data-radix-alert-dialog-content][data-state="open"] {
-            animation: fadeInSmooth 0.3s ease-out !important;
+            animation: fadeInSmooth 0.3s ease-out forwards !important;
           }
 
-          /* Listas de Seleção - desenrolar de cima */
+          [data-radix-dialog-content][data-state="closed"],
+          [data-radix-alert-dialog-content][data-state="closed"] {
+            animation: fadeOut 0.2s ease-in forwards !important;
+          }
+
+          /* Listas de Seleção, Popovers, Dropdowns, Context Menus - desenrolar de cima */
           [data-radix-select-content][data-state="open"],
           [role="listbox"][data-state="open"],
-          [data-radix-popper-content][data-state="open"] {
-            animation: slideDownFromTop 0.25s ease-out !important;
+          [data-radix-popper-content][data-state="open"],
+          [data-radix-dropdown-menu-content][data-state="open"],
+          [data-radix-context-menu-content][data-state="open"] {
+            animation: slideDownFromTop 0.25s ease-out forwards !important;
           }
 
           [data-radix-select-content][data-state="closed"],
           [role="listbox"][data-state="closed"],
-          [data-radix-popper-content][data-state="closed"] {
-            animation: slideUpToTop 0.2s ease-in !important;
-          }
-
-          /* Dropdown menus - desenrolar de cima */
-          [data-radix-dropdown-menu-content][data-state="open"] {
-            animation: slideDownFromTop 0.25s ease-out !important;
-          }
-
-          [data-radix-dropdown-menu-content][data-state="closed"] {
-            animation: slideUpToTop 0.2s ease-in !important;
-          }
-
-          /* Context menus - desenrolar de cima */
-          [data-radix-context-menu-content][data-state="open"] {
-            animation: slideDownFromTop 0.25s ease-out !important;
-          }
-
+          [data-radix-popper-content][data-state="closed"],
+          [data-radix-dropdown-menu-content][data-state="closed"],
           [data-radix-context-menu-content][data-state="closed"] {
-            animation: slideUpToTop 0.2s ease-in !important;
+            animation: slideUpToTop 0.2s ease-in forwards !important;
           }
           
           /* Tooltip Styles */
