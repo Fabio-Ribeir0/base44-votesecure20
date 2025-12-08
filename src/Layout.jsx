@@ -233,11 +233,15 @@ export default function Layout({ children }) {
           .modal-smooth-fade[data-state="open"],
           [data-radix-dialog-content][data-state="open"],
           [data-radix-alert-dialog-content][data-state="open"] {
+            transform: none !important;
+            transition: none !important;
             animation: fadeInSmooth 0.3s ease-out forwards !important;
           }
 
           [data-radix-dialog-content][data-state="closed"],
           [data-radix-alert-dialog-content][data-state="closed"] {
+            transform: none !important;
+            transition: none !important;
             animation: fadeOut 0.2s ease-in forwards !important;
           }
 
@@ -247,6 +251,8 @@ export default function Layout({ children }) {
           [data-radix-popper-content][data-state="open"],
           [data-radix-dropdown-menu-content][data-state="open"],
           [data-radix-context-menu-content][data-state="open"] {
+            transform: none !important;
+            transition: none !important;
             animation: slideDownFromTop 0.25s ease-out forwards !important;
           }
 
@@ -255,6 +261,8 @@ export default function Layout({ children }) {
           [data-radix-popper-content][data-state="closed"],
           [data-radix-dropdown-menu-content][data-state="closed"],
           [data-radix-context-menu-content][data-state="closed"] {
+            transform: none !important;
+            transition: none !important;
             animation: slideUpToTop 0.2s ease-in forwards !important;
           }
           
