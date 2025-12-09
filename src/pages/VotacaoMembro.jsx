@@ -63,42 +63,13 @@ export default function VotacaoMembro() {
       }
       setAssembleia(assembleiaData);
 
-      /*/ Validate member
+      // Validate member
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
         email: userData.email
-      });*/
+      });
 
-
-
-
-
-
-
-    // Busca apenas membros do tenant (já reduz bastante)
-    const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id
-    });
-
-    // Encontra o membro específico
-    const membroData = membrosEncontrados.find(m => 
-    m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
-    );
-
-    if (!membroData) {
-    throw new Error('Membro não encontrado');
-    }else{
-        console.log('Membro encontrado', membroData);
-    }
-    
-
-
-
-
-
-
-      
-      //const membroData = membrosEncontrados[0];
+      const membroData = membrosEncontrados[0];
 
       if (!membroData) {
         setError('Você não é membro desta organização');
