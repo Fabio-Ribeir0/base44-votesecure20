@@ -71,12 +71,7 @@ export default function Checkin() {
       }
 
       // Find member record directly by email and tenant_id
-      /*const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id,
-        email: user.email.trim().toLowerCase()
-      });*/
-
-      const membrosEncontrados = await base44.Membro.filter({ 
+      const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
         email: user.email.trim().toLowerCase()
       });
