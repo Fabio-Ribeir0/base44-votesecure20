@@ -70,26 +70,38 @@ export default function Checkin() {
         return;
       }
 
-      // Find member record directly by email and tenant_id
+      /*/ Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id/*,
-        email: user.email*/
-      });
+        tenant_id: assembleiaData.tenant_id,
+        email: user.email
+      });*/
       
+
+
+
+
+
+    // Tente buscar de forma diferente
+    const membrosEncontrados = await base44.entities.Membro.filter({ 
+    $and: [
+        { tenant_id: assembleiaData.tenant_id },
+        { email: user.email }
+    ]
+    });
+
+    /*/ Ou busque por ID se disponível
+    const membrosEncontrados = await base44.entities.Membro.query()
+    .where('tenant_id', '=', assembleiaData.tenant_id)
+    .where('email', '=', user.email)
+    .get();*/
+
+
+
+
+
+
       const membro = membrosEncontrados[0];
-
-
-
-
-    // Verifique os códigos Unicode
-    console.log('email:', user.email.split('').map(c => c.charCodeAt(0)));
-
-    // Compare com os dados do banco
-    console.log('DB email:', membro.email.split('').map(c => c.charCodeAt(0)));
-
-
-
-
+      console.log('Membro encontrado', membro);
 
       if (!membro) {
         setStatus('error');
