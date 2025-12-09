@@ -182,11 +182,11 @@ export default function Layout({ children }) {
           @keyframes fadeIn {
             from {
               opacity: 0;
-              //transform: scale(0.95);
+              transform: scale(0.95);
             }
             to {
               opacity: 1;
-              //transform: scale(1);
+              transform: scale(1);
             }
           }
 
@@ -239,7 +239,7 @@ export default function Layout({ children }) {
           
           /* Smooth transitions */
           * {
-            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             transition-duration: 150ms;
           }
