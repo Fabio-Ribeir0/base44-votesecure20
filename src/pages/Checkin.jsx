@@ -70,13 +70,14 @@ export default function Checkin() {
         return;
       }
 
-      // Find member record directly by email and tenant_id
+      // Find all members of tenant, then search for specific member by normalized email
       const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id,
-        email: user.email
+        tenant_id: assembleiaData.tenant_id
       });
 
-      const membro = membrosEncontrados[0];
+      const membro = membrosEncontrados.find(m => 
+        m.email && m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
+      );
 
       if (!membro) {
         setStatus('error');

@@ -63,13 +63,14 @@ export default function VotacaoMembro() {
       }
       setAssembleia(assembleiaData);
 
-      // Validate member
+      // Validate member - find all members of tenant, then search for specific member by normalized email
       const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id,
-        email: userData.email
+        tenant_id: assembleiaData.tenant_id
       });
 
-      const membroData = membrosEncontrados[0];
+      const membroData = membrosEncontrados.find(m => 
+        m.email && m.email.trim().toLowerCase() === userData.email.trim().toLowerCase()
+      );
 
       if (!membroData) {
         setError('Você não é membro desta organização');
