@@ -72,11 +72,24 @@ export default function Checkin() {
 
       // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
-        tenant_id: assembleiaData.tenant_id,
-        email: user.email
+        tenant_id: assembleiaData.tenant_id/*,
+        email: user.email*/
       });
       
       const membro = membrosEncontrados[0];
+
+
+
+
+    // Verifique os códigos Unicode
+    console.log('email:', user.email.split('').map(c => c.charCodeAt(0)));
+
+    // Compare com os dados do banco
+    console.log('DB email:', membro.email.split('').map(c => c.charCodeAt(0)));
+
+
+
+
 
       if (!membro) {
         setStatus('error');
