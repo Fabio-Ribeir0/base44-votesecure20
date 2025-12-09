@@ -63,11 +63,11 @@ export default function VotacaoMembro() {
       }
       setAssembleia(assembleiaData);
 
-      // Validate member
+      /*/ Validate member
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
         email: userData.email
-      });
+      });*/
 
 
 
