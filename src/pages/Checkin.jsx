@@ -78,20 +78,6 @@ export default function Checkin() {
       
       const membro = membrosEncontrados[0];
 
-    // Encontra o membro específico
-    const membroEncontrado = membrosEncontrados.find(m => 
-    m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
-    );
-
-    if (!membroEncontrado) {
-        throw new Error('Membro não encontrado');
-    }else{
-        consoloe.log('Membro encontrado: ', membroEncontrado);
-    }
-
-
-
-
       if (!membro) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado para esta assembleia. Verifique se o e-mail cadastrado corresponde ao seu e-mail de login ou entre em contato com o administrador.');
