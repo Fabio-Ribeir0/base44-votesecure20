@@ -156,7 +156,7 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="modal-smooth-fade sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{votacao ? 'Editar Votação' : 'Nova Votação'}</DialogTitle>
         </DialogHeader>
