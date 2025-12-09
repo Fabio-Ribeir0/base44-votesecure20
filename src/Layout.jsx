@@ -237,7 +237,7 @@ export default function Layout({ children }) {
             outline-offset: 2px;
           }
           
-          /* Smooth transitions */
+          /* Smooth transitions | Problema da animação das listas era <, transform do final da linha 242> */
           * {
             transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
