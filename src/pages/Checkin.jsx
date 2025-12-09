@@ -70,36 +70,12 @@ export default function Checkin() {
         return;
       }
 
-      /*/ Find member record directly by email and tenant_id
+      // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
         email: user.email
-      });*/
+      });
       
-
-
-
-
-
-    /*/ Tente buscar de forma diferente
-    const membrosEncontrados = await base44.entities.Membro.filter({ 
-    $and: [
-        { tenant_id: assembleiaData.tenant_id },
-        { email: user.email }
-    ]
-    });*/
-
-    // Ou busque por ID se disponível
-    const membrosEncontrados = await base44.entities.Membro.query()
-    .where('tenant_id', '=', assembleiaData.tenant_id)
-    .where('email', '=', user.email)
-    .get();
-
-
-
-
-
-
       const membro = membrosEncontrados[0];
       console.log('Membro encontrado', membro);
 
