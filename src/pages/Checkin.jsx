@@ -70,37 +70,13 @@ export default function Checkin() {
         return;
       }
 
-      /*/ Find member record directly by email and tenant_id
+      // Find member record directly by email and tenant_id
       const membrosEncontrados = await base44.entities.Membro.filter({ 
         tenant_id: assembleiaData.tenant_id,
         email: user.email
-      });*/
+      });
 
-
-
-
-
-    // Busca apenas membros do tenant (já reduz bastante)
-    const membrosEncontrados = await base44.entities.Membro.filter({ 
-    tenant_id: assembleiaData.tenant_id
-    });
-
-    // Encontra o membro específico
-    const membro = membrosEncontrados.find(m => 
-    m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
-    );
-
-    if (!membro) {
-    throw new Error('Membro não encontrado');
-    }else{
-        console.log('Membro encontrado', membro);
-    }
-
-
-
-
-      
-      //const membro = membrosEncontrados[0];
+      const membro = membrosEncontrados[0];
 
       if (!membro) {
         setStatus('error');
