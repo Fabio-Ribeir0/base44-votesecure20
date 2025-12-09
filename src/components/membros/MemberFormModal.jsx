@@ -64,12 +64,33 @@ export default function MemberFormModal({ open, onOpenChange, member, tenantId, 
     setErrors({});
   }, [member, open]);
 
-  const handleChange = (field, value) => {
+  /*const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
-  };
+  };*/
+
+
+
+  
+
+    const handleChange = (field, value) => {
+    // Normaliza email ao digitar
+    if (field === 'email') {
+        value = value.trim().toLowerCase();
+    }
+    
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+        setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+    };
+
+
+
+
+
 
   const validate = () => {
     const newErrors = {};
