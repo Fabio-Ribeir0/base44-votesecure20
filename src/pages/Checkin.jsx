@@ -78,9 +78,6 @@ export default function Checkin() {
       
       const membro = membrosEncontrados[0];
 
-
-
-
     // Encontra o membro específico
     const membroEncontrado = membrosEncontrados.find(m => 
     m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
