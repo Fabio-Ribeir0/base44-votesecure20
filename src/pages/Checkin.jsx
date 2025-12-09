@@ -81,34 +81,16 @@ export default function Checkin() {
 
 
 
-
-
-    console.log('=== DEBUG FILTRO ===');
-    console.log('Buscando por:');
-    console.log('  tenant_id:', JSON.stringify(assembleiaData.tenant_id));
-    console.log('  email:', JSON.stringify(user.email));
-    console.log('  tenant_id type:', typeof assembleiaData.tenant_id);
-    console.log('  email type:', typeof user.email);
-
-    // Busque TODOS os membros desse tenant e compare manualmente
-    const todosMembros = await base44.entities.Membro.filter({ 
-    tenant_id: assembleiaData.tenant_id
-    });
-
-    console.log('Total membros no tenant:', todosMembros.length);
-
-    // Compare manualmente
-    todosMembros.forEach(membro => {
-    console.log('---');
-    console.log('DB email:', JSON.stringify(membro.email));
-    console.log('Buscado:', JSON.stringify(user.email));
-    console.log('Iguais (===):', membro.email === user.email);
-    console.log('Iguais (trim+lower):', 
-        membro.email.trim().toLowerCase() === user.email.trim().toLowerCase()
+    // Encontra o membro específico
+    const membroEncontrado = membrosEncontrados.find(m => 
+    m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
     );
-    });
 
-
+    if (!membroEncontrado) {
+        throw new Error('Membro não encontrado');
+    }else{
+        consoloe.log('Membro encontrado: ', membroEncontrado);
+    }
 
 
 
