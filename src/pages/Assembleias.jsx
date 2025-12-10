@@ -96,7 +96,23 @@ export default function Assembleias() {
   const loadAssembleias = async (tenantId) => {
     try {
       const data = await base44.entities.Assembleia.filter({ tenant_id: tenantId });
-      setAssembleias(data.sort((a, b) => new Date(b.data_hora_inicio) - new Date(a.data_hora_inicio)));
+      
+      // Load membros and checkins to calculate quorum
+      const membros = await base44.entities.Membro.filter({ tenant_id: tenantId, ativo: true });
+      
+      // Enrich assembleia data with quorum info
+      const enrichedData = await Promise.all(data.map(async (assembleia) => {
+        const checkins = await base44.entities.CheckIn.filter({ assembleia_id: assembleia.id });
+        const presentCount = checkins.length;
+        const quorumPercentage = membros.length > 0 ? Math.round((presentCount / membros.length) * 100) : 0;
+        
+        return {
+          ...assembleia,
+          quorumAtual: quorumPercentage
+        };
+      }));
+      
+      setAssembleias(enrichedData.sort((a, b) => new Date(b.data_hora_inicio) - new Date(a.data_hora_inicio)));
     } catch (error) {
       console.error('Error loading assembleias:', error);
       setAssembleias([]);
@@ -157,8 +173,6 @@ export default function Assembleias() {
               <p style={{ color: '#757575' }}>Gerencie as assembleias da sua organização</p>
             </div>
 
-
-
             <Button
               onClick={() => setShowAddModal(true)}
               className="text-white px-4 py-2 transition-all duration-200 flex items-center justify-center"
@@ -179,9 +193,6 @@ export default function Assembleias() {
               <Plus className="w-4 h-4 mr-2" />
               Nova Assembleia
             </Button>
-
-
-
           </div>
 
           {/* Filters */}
@@ -252,6 +263,10 @@ export default function Assembleias() {
                                   {assembleia.local}
                                 </div>
                               )}
+                              <div className="flex items-center gap-1">
+                                <Users className="w-4 h-4" />
+                                Quórum: {assembleia.quorumAtual || 0}%/{assembleia.quorum_minimo}%
+                              </div>
                             </div>
                             {assembleia.descricao && (
                               <p className="text-gray-600 mt-2 text-sm line-clamp-2">{assembleia.descricao}</p>
