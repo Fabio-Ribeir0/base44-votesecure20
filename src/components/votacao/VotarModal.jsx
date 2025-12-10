@@ -20,6 +20,7 @@ export default function VotarModal({ open, onOpenChange, votacao, membroId, peso
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isAbstencao, setIsAbstencao] = useState(false);
+  const [maxOpcoesExcedido, setMaxOpcoesExcedido] = useState(false);
 
   useEffect(() => {
     setSelectedOption('');
@@ -29,9 +30,16 @@ export default function VotarModal({ open, onOpenChange, votacao, membroId, peso
 
   const handleMultipleChoice = (option, checked) => {
     if (checked) {
+      const maxOpcoes = votacao?.max_opcoes_multipla_escolha;
+      if (maxOpcoes && selectedOptions.length >= maxOpcoes) {
+        setMaxOpcoesExcedido(true);
+        return;
+      }
       setSelectedOptions(prev => [...prev, option]);
+      setMaxOpcoesExcedido(false);
     } else {
       setSelectedOptions(prev => prev.filter(o => o !== option));
+      setMaxOpcoesExcedido(false);
     }
     setIsAbstencao(false);
   };
@@ -149,6 +157,18 @@ export default function VotarModal({ open, onOpenChange, votacao, membroId, peso
                 ? 'Selecione uma opção:' 
                 : 'Selecione uma ou mais opções:'}
             </p>
+            
+            {votacao.tipo_voto === 'Múltipla Escolha' && votacao.max_opcoes_multipla_escolha && (
+              <p className="text-xs text-gray-600 mb-3">
+                Você pode selecionar até {votacao.max_opcoes_multipla_escolha} opções
+              </p>
+            )}
+            
+            {maxOpcoesExcedido && (
+              <p className="text-xs text-red-600 mb-3">
+                Limite de {votacao.max_opcoes_multipla_escolha} opções atingido
+              </p>
+            )}
 
             {votacao.tipo_voto === 'Escolha Única' ? (
               <RadioGroup 
