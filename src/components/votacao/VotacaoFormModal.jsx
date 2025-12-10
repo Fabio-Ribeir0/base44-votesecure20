@@ -31,6 +31,8 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
     voto_secreto: false,
     voto_qualificado: false,
     permite_abstencao: true,
+    quorum_minimo: '',
+    max_opcoes_multipla_escolha: '',
     opcoes: ['', '']
   });
   const [errors, setErrors] = useState({});
@@ -44,6 +46,8 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
         voto_secreto: votacao.voto_secreto || false,
         voto_qualificado: votacao.voto_qualificado || false,
         permite_abstencao: votacao.permite_abstencao !== false,
+        quorum_minimo: votacao.quorum_minimo || '',
+        max_opcoes_multipla_escolha: votacao.max_opcoes_multipla_escolha || '',
         opcoes: votacao.opcoes || ['', '']
       });
     } else {
@@ -54,6 +58,8 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
         voto_secreto: false,
         voto_qualificado: false,
         permite_abstencao: true,
+        quorum_minimo: '',
+        max_opcoes_multipla_escolha: '',
         opcoes: ['', '']
       });
     }
@@ -122,6 +128,14 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
         criado_por: userId
       };
 
+      if (formData.quorum_minimo && formData.quorum_minimo > 0) {
+        data.quorum_minimo = formData.quorum_minimo;
+      }
+      
+      if (formData.tipo_voto === 'Múltipla Escolha' && formData.max_opcoes_multipla_escolha && formData.max_opcoes_multipla_escolha > 0) {
+        data.max_opcoes_multipla_escolha = formData.max_opcoes_multipla_escolha;
+      }
+
       if (votacao) {
         await base44.entities.Votacao.update(votacao.id, data);
         toast.success('Votação atualizada!');
@@ -184,17 +198,48 @@ export default function VotacaoFormModal({ open, onOpenChange, votacao, assemble
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>Tipo de Votação</Label>
-            <Select value={formData.tipo_voto} onValueChange={(v) => handleChange('tipo_voto', v)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Escolha Única">Escolha Única</SelectItem>
-                <SelectItem value="Múltipla Escolha">Múltipla Escolha</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Tipo de Votação</Label>
+              <Select value={formData.tipo_voto} onValueChange={(v) => handleChange('tipo_voto', v)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Escolha Única">Escolha Única</SelectItem>
+                  <SelectItem value="Múltipla Escolha">Múltipla Escolha</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {formData.tipo_voto === 'Múltipla Escolha' && (
+              <div className="space-y-2">
+                <Label htmlFor="max_opcoes">Máximo de Opções</Label>
+                <Input
+                  id="max_opcoes"
+                  type="number"
+                  min="1"
+                  max={formData.opcoes.filter(o => o.trim()).length}
+                  value={formData.max_opcoes_multipla_escolha}
+                  onChange={(e) => handleChange('max_opcoes_multipla_escolha', parseInt(e.target.value) || '')}
+                  placeholder="Ex: 2"
+                />
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="quorum_minimo">Quórum Mínimo (%)</Label>
+              <Input
+                id="quorum_minimo"
+                type="number"
+                min="0"
+                max="100"
+                value={formData.quorum_minimo}
+                onChange={(e) => handleChange('quorum_minimo', parseInt(e.target.value) || '')}
+                placeholder="Opcional"
+              />
+              <p className="text-xs text-gray-500">Se não definido, usa o da assembleia</p>
+            </div>
           </div>
 
           <div className="space-y-3">

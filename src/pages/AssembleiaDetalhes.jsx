@@ -18,7 +18,13 @@ import {
   Send,
   Plus,
   CheckCircle,
-  XCircle
+  XCircle,
+  MoreVertical,
+  Pencil,
+  Trash2,
+  Lock,
+  Scale,
+  MinusCircle
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,6 +52,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import QRCode from 'react-qr-code';
@@ -75,6 +98,7 @@ export default function AssembleiaDetalhes() {
   const [editingVotacao, setEditingVotacao] = useState(null);
   const [votandoEm, setVotandoEm] = useState(null);
   const [myMembro, setMyMembro] = useState(null);
+  const [votacaoToDelete, setVotacaoToDelete] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -291,6 +315,36 @@ export default function AssembleiaDetalhes() {
     }
   };
 
+  const handleDeleteVotacao = async () => {
+    if (!votacaoToDelete) return;
+    
+    try {
+      await base44.entities.Votacao.delete(votacaoToDelete.id);
+      toast.success('Votação excluída!');
+      
+      // Log audit
+      AuditLogger.logDelete('Votacao', votacaoToDelete.id,
+        `Votação "${votacaoToDelete.titulo}" excluída`,
+        tenant.id, user
+      );
+      
+      setVotacaoToDelete(null);
+      loadData();
+    } catch (error) {
+      console.error('Error deleting votacao:', error);
+      toast.error('Erro ao excluir votação');
+    }
+  };
+
+  const canOpenVotacao = (votacao) => {
+    // Se a votação tem quórum próprio, verifica se o quórum atual atende
+    if (votacao.quorum_minimo && votacao.quorum_minimo > 0) {
+      return quorumPercentage >= votacao.quorum_minimo;
+    }
+    // Se não tem quórum próprio, verifica o quórum da assembleia
+    return quorumPercentage >= (assembleia?.quorum_minimo || 0);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -500,7 +554,7 @@ export default function AssembleiaDetalhes() {
                       {votacoes.map(votacao => (
                         <Card key={votacao.id} className="hover:shadow-md transition-shadow">
                           <CardContent className="p-4">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                               <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
                                   <h4 className="font-semibold text-gray-900">{votacao.titulo}</h4>
@@ -512,11 +566,46 @@ export default function AssembleiaDetalhes() {
                                     {votacao.status}
                                   </Badge>
                                 </div>
-                                <p className="text-sm text-gray-500">{votacao.tipo_voto}</p>
+                                
+                                <div className="flex flex-wrap items-center gap-2 mt-2">
+                                  <Badge variant="outline" className="text-xs">
+                                    {votacao.tipo_voto}
+                                  </Badge>
+                                  
+                                  {votacao.voto_secreto && (
+                                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                      <Lock className="w-3 h-3" />
+                                      Voto Secreto
+                                    </Badge>
+                                  )}
+                                  
+                                  {votacao.voto_qualificado && (
+                                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                      <Scale className="w-3 h-3" />
+                                      Voto Qualificado
+                                    </Badge>
+                                  )}
+                                  
+                                  {votacao.permite_abstencao && (
+                                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                      <MinusCircle className="w-3 h-3" />
+                                      Permite Abstenção
+                                    </Badge>
+                                  )}
+                                  
+                                  {votacao.quorum_minimo && votacao.quorum_minimo > 0 && (
+                                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                      <Users className="w-3 h-3" />
+                                      Quórum: {quorumPercentage}%/{votacao.quorum_minimo}%
+                                    </Badge>
+                                  )}
+                                </div>
+
                                 {votacao.descricao && (
-                                  <p className="text-sm text-gray-600 mt-1">{votacao.descricao}</p>
+                                  <p className="text-sm text-gray-600 mt-2">{votacao.descricao}</p>
                                 )}
                               </div>
+                              
                               <div className="flex gap-2">
                                 {votacao.status === 'Aberta' && myMembro && (
                                   <Button 
@@ -531,6 +620,8 @@ export default function AssembleiaDetalhes() {
                                   <Button 
                                     variant="outline"
                                     onClick={() => handleVotacaoStatusChange(votacao, 'Aberta')}
+                                    disabled={!canOpenVotacao(votacao)}
+                                    title={!canOpenVotacao(votacao) ? 'Quórum mínimo não atingido' : ''}
                                   >
                                     <Play className="w-4 h-4 mr-2" />
                                     Abrir
@@ -545,6 +636,31 @@ export default function AssembleiaDetalhes() {
                                     Encerrar
                                   </Button>
                                 )}
+                                
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem 
+                                      onClick={() => setEditingVotacao(votacao)}
+                                      disabled={votacao.status !== 'Pendente'}
+                                    >
+                                      <Pencil className="w-4 h-4 mr-2" />
+                                      Editar
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem 
+                                      onClick={() => setVotacaoToDelete(votacao)}
+                                      className="text-red-600"
+                                    >
+                                      <Trash2 className="w-4 h-4 mr-2" />
+                                      Excluir
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </div>
                             </div>
                           </CardContent>
@@ -752,6 +868,24 @@ export default function AssembleiaDetalhes() {
           loadData();
         }}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!votacaoToDelete} onOpenChange={(open) => { if (!open) setVotacaoToDelete(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir a votação "{votacaoToDelete?.titulo}"? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteVotacao} className="bg-red-600 hover:bg-red-700">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
