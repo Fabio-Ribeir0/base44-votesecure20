@@ -133,25 +133,15 @@ export default function MemberFormModal({ open, onOpenChange, member, tenantId, 
           );
         }
 
-        // Send welcome email if member has email and is new user
-        if (formData.email && tenantNome) {
-          try {
-            const emailResult = await base44.functions.invoke('notificarNovoMembro', {
-              membro_email: formData.email,
-              membro_nome: formData.nome_completo,
-              tenant_nome: tenantNome,
-              tenant_id: tenantId
-            });
-            
-            if (emailResult.data?.email_sent) {
-              toast.success('E-mail de boas-vindas enviado!', { duration: 3000 });
-            } else if (emailResult.data?.user_exists) {
-              console.log('Usuário já existe no sistema, e-mail não enviado');
-            }
-          } catch (emailError) {
-            console.error('Erro ao enviar e-mail de boas-vindas:', emailError);
-            // Não mostra erro ao usuário, apenas loga
-          }
+        // Send webhook notification for new member
+        try {
+          await base44.functions.invoke('webhookMembrosAdicionados', {
+            tenant_id: tenantId,
+            members: [newMembro]
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de novo membro:', webhookError);
+          // Não bloqueia a criação do membro
         }
       }
       onSuccess();

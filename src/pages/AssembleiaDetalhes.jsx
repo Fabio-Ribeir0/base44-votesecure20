@@ -207,6 +207,7 @@ export default function AssembleiaDetalhes() {
     try {
       let successCount = 0;
       let alreadyCheckedCount = 0;
+      const checkedInMembers = [];
 
       for (const membroId of selectedMembros) {
         // Check if already checked in
@@ -231,7 +232,22 @@ export default function AssembleiaDetalhes() {
           tenant.id, user
         );
 
+        checkedInMembers.push(membroSelecionado);
         successCount++;
+      }
+
+      // Send webhook notification for checked-in members
+      if (checkedInMembers.length > 0) {
+        try {
+          await base44.functions.invoke('webhookCheckinConfirmado', {
+            tenant_id: tenant.id,
+            assembleia_id: assembleia.id,
+            members: checkedInMembers
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de check-in:', webhookError);
+          // Não bloqueia o check-in
+        }
       }
 
       if (successCount > 0) {

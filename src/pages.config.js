@@ -1,34 +1,34 @@
-import Home from './pages/Home';
+import AssembleiaDetalhes from './pages/AssembleiaDetalhes';
+import Assembleias from './pages/Assembleias';
+import Checkin from './pages/Checkin';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+import Logs from './pages/Logs';
+import Membros from './pages/Membros';
 import MeuPerfil from './pages/MeuPerfil';
 import MinhaOrganizacao from './pages/MinhaOrganizacao';
-import Membros from './pages/Membros';
-import Assembleias from './pages/Assembleias';
-import AssembleiaDetalhes from './pages/AssembleiaDetalhes';
-import Checkin from './pages/Checkin';
-import Usuarios from './pages/Usuarios';
-import Logs from './pages/Logs';
-import Procuracoes from './pages/Procuracoes';
-import PaymentSuccess from './pages/PaymentSuccess';
 import NotFound from './pages/NotFound';
+import PaymentSuccess from './pages/PaymentSuccess';
+import Procuracoes from './pages/Procuracoes';
+import Usuarios from './pages/Usuarios';
 import VotacaoMembro from './pages/VotacaoMembro';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Home": Home,
+    "AssembleiaDetalhes": AssembleiaDetalhes,
+    "Assembleias": Assembleias,
+    "Checkin": Checkin,
     "Dashboard": Dashboard,
+    "Home": Home,
+    "Logs": Logs,
+    "Membros": Membros,
     "MeuPerfil": MeuPerfil,
     "MinhaOrganizacao": MinhaOrganizacao,
-    "Membros": Membros,
-    "Assembleias": Assembleias,
-    "AssembleiaDetalhes": AssembleiaDetalhes,
-    "Checkin": Checkin,
-    "Usuarios": Usuarios,
-    "Logs": Logs,
-    "Procuracoes": Procuracoes,
-    "PaymentSuccess": PaymentSuccess,
     "NotFound": NotFound,
+    "PaymentSuccess": PaymentSuccess,
+    "Procuracoes": Procuracoes,
+    "Usuarios": Usuarios,
     "VotacaoMembro": VotacaoMembro,
 }
 
