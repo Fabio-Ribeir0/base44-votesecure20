@@ -75,7 +75,6 @@ export default function Footer() {
 
         <div className="mt-12 pt-8 text-center text-sm" style={{ borderTop: '1px solid #424242', color: '#757575' }}>
           <p>© {new Date().getFullYear()} VoteSecure. Todos os direitos reservados.</p>
-        </div>
 
           <span className="text-sm">Powered by</span>
             <a 
@@ -92,6 +91,7 @@ export default function Footer() {
               <span className="text-sm font-semibold">MiniMind</span>
             </a>
 
+        </div>
       </div>
     </footer>
   );
