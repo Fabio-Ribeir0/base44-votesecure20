@@ -120,6 +120,18 @@ export default function Checkin() {
         assembleiaData.tenant_id, user
       );
 
+      // Send webhook notification for check-in
+      try {
+        await base44.functions.invoke('webhookCheckinConfirmado', {
+          tenant_id: assembleiaData.tenant_id,
+          assembleia_id: assembleiaData.id,
+          members: [membro]
+        });
+      } catch (webhookError) {
+        console.error('Erro ao enviar webhook de check-in:', webhookError);
+        // Não bloqueia o check-in
+      }
+
       setStatus('success');
       setMessage('Check-in realizado com sucesso! Você será redirecionado para a votação.');
 

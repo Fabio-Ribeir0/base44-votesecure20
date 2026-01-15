@@ -81,18 +81,33 @@ export default function ImportCSVModal({ open, onOpenChange, tenantId, onSuccess
       let successCount = 0;
       let errorCount = 0;
       const errors = [];
+      const createdMembers = [];
 
       for (const member of parsedData) {
         try {
-          await base44.entities.Membro.create({
+          const newMember = await base44.entities.Membro.create({
             ...member,
             tenant_id: tenantId,
             ativo: true
           });
+          createdMembers.push(newMember);
           successCount++;
         } catch (error) {
           errorCount++;
           errors.push(`${member.nome_completo}: ${error.message}`);
+        }
+      }
+
+      // Send webhook notification for imported members
+      if (createdMembers.length > 0) {
+        try {
+          await base44.functions.invoke('webhookMembrosAdicionados', {
+            tenant_id: tenantId,
+            members: createdMembers
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de membros importados:', webhookError);
+          // Não bloqueia a importação
         }
       }
 
