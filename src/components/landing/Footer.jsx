@@ -19,7 +19,7 @@ export default function Footer() {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4" style={{ color: '#1976D2' }} />
-                <span>contato@votesecure.com.br</span>
+                <span>minimind.apps@gmail.com</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Phone className="w-4 h-4" style={{ color: '#1976D2' }} />
