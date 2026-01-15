@@ -76,6 +76,22 @@ export default function Footer() {
         <div className="mt-12 pt-8 text-center text-sm" style={{ borderTop: '1px solid #424242', color: '#757575' }}>
           <p>© {new Date().getFullYear()} VoteSecure. Todos os direitos reservados.</p>
         </div>
+
+          <span className="text-sm">Powered by</span>
+            <a 
+              href="https://www.instagram.com/minimind_apps/?hl=pt-br" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/690de11942f9615a68f4978d/83ed5c84d_image.png" 
+                alt="MiniMind" 
+                className="h-6 brightness-0 invert opacity-80"
+              />
+              <span className="text-sm font-semibold">MiniMind</span>
+            </a>
+
       </div>
     </footer>
   );
