@@ -76,7 +76,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 text-center text-sm" style={{ borderTop: '1px solid #424242', color: '#757575' }}>
           <p>© {new Date().getFullYear()} VoteSecure. Todos os direitos reservados.</p>
 
-          <span className="text-sm">Powered by</span>
+          <span>Powered by</span>
             <a 
               href="https://www.instagram.com/minimind_apps/?hl=pt-br" 
               target="_blank" 
