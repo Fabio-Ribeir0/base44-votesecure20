@@ -94,8 +94,9 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
         quorum_minimo: parseInt(formData.quorum_minimo) || 0
       };
 
+      let result;
       if (assembleia) {
-        await base44.entities.Assembleia.update(assembleia.id, data);
+        result = await base44.entities.Assembleia.update(assembleia.id, data);
         toast.success('Assembleia atualizada com sucesso!');
         
         // Log audit
@@ -106,7 +107,7 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
           );
         }
       } else {
-        const newAssembleia = await base44.entities.Assembleia.create({
+        result = await base44.entities.Assembleia.create({
           ...data,
           tenant_id: tenantId,
           criado_por: userId,
@@ -117,12 +118,34 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
         
         // Log audit
         if (user) {
-          AuditLogger.logCreate('Assembleia', newAssembleia.id,
+          AuditLogger.logCreate('Assembleia', result.id,
             `Assembleia "${data.nome}" criada`,
             tenantId, user
           );
         }
       }
+
+      // Send webhook notification for assembly
+      try {
+        const membros = await base44.entities.Membro.filter({ tenant_id: tenantId, ativo: true });
+        const tenant = await base44.entities.Tenant.filter({ id: tenantId });
+        
+        await base44.functions.invoke('enviarWebhookN8N', {
+          event: assembleia ? 'updated_assembly' : 'new_assembly',
+          tenant_id: tenantId,
+          organization_name: tenant[0]?.nome || '',
+          assembleia_id: assembleia ? assembleia.id : result.id,
+          assembly_name: data.nome,
+          assembly_datetime: data.data_hora_inicio,
+          assembly_local: data.local || '',
+          assembly_status: assembleia ? assembleia.status : 'Agendada',
+          members: membros
+        });
+      } catch (webhookError) {
+        console.error('Erro ao enviar webhook de assembleia:', webhookError);
+        // Não bloqueia a criação/atualização
+      }
+
       onSuccess();
     } catch (error) {
       console.error('Error saving assembleia:', error);
