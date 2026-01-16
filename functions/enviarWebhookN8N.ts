@@ -69,6 +69,29 @@ async function sendWebhookWithRetry(url, payload, maxRetries = 3) {
 }
 
 /**
+ * Normaliza número de telefone com código do país
+ */
+function normalizeTelephone(phone) {
+  if (!phone) return '';
+  
+  // Remove espaços, parênteses, traços
+  let normalized = phone.replace(/[\s\(\)\-]/g, '');
+  
+  // Se já começa com +55, retorna como está
+  if (normalized.startsWith('+55')) {
+    return normalized;
+  }
+  
+  // Se começa com 55 (sem +), adiciona o +
+  if (normalized.startsWith('55') && normalized.length > 10) {
+    return '+' + normalized;
+  }
+  
+  // Caso contrário, adiciona +55 no início
+  return '+55' + normalized;
+}
+
+/**
  * Valida e normaliza dados de membros
  */
 function validateAndNormalizeMembers(members) {
@@ -80,7 +103,7 @@ function validateAndNormalizeMembers(members) {
     id: m.id || '',
     name: m.nome_completo || '',
     email: m.email || '',
-    telephone: m.telefone || '',
+    telephone: normalizeTelephone(m.telefone),
     role: m.tipo_membro || 'Proprietário',
     url: m.url || ''
   }));
