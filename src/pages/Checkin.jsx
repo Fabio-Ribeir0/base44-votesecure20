@@ -122,10 +122,20 @@ export default function Checkin() {
 
       // Send webhook notification for check-in
       try {
-        await base44.functions.invoke('webhookCheckinConfirmado', {
+        const baseUrl = window.location.origin;
+        const magicLink = `${baseUrl}/VotacaoMembro?assembleia_id=${assembleiaData.id}`;
+        
+        // Get tenant info
+        const tenants = await base44.entities.Tenant.filter({ id: assembleiaData.tenant_id });
+        const tenant = tenants[0];
+        
+        await base44.functions.invoke('enviarWebhookN8N', {
+          event: 'checkin_confirmed_batch',
           tenant_id: assembleiaData.tenant_id,
+          organization_name: tenant?.nome || '',
           assembleia_id: assembleiaData.id,
-          members: [membro]
+          assembly_name: assembleiaData.nome,
+          members: [{ ...membro, url: magicLink }]
         });
       } catch (webhookError) {
         console.error('Erro ao enviar webhook de check-in:', webhookError);

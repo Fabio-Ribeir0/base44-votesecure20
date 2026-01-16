@@ -101,7 +101,8 @@ export default function ImportCSVModal({ open, onOpenChange, tenantId, onSuccess
       // Send webhook notification for imported members
       if (createdMembers.length > 0) {
         try {
-          await base44.functions.invoke('webhookMembrosAdicionados', {
+          await base44.functions.invoke('enviarWebhookN8N', {
+            event: 'members_added_batch',
             tenant_id: tenantId,
             members: createdMembers
           });

@@ -239,10 +239,16 @@ export default function AssembleiaDetalhes() {
       // Send webhook notification for checked-in members
       if (checkedInMembers.length > 0) {
         try {
-          await base44.functions.invoke('webhookCheckinConfirmado', {
+          const baseUrl = window.location.origin;
+          const magicLink = `${baseUrl}/VotacaoMembro?assembleia_id=${assembleia.id}`;
+          
+          await base44.functions.invoke('enviarWebhookN8N', {
+            event: 'checkin_confirmed_batch',
             tenant_id: tenant.id,
+            organization_name: tenant.nome,
             assembleia_id: assembleia.id,
-            members: checkedInMembers
+            assembly_name: assembleia.nome,
+            members: checkedInMembers.map(m => ({ ...m, url: magicLink }))
           });
         } catch (webhookError) {
           console.error('Erro ao enviar webhook de check-in:', webhookError);
