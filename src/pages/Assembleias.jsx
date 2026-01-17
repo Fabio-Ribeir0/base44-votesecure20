@@ -15,7 +15,8 @@ import {
   Filter,
   Clock,
   MapPin,
-  Users
+  Users,
+  Copy
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -123,10 +124,75 @@ export default function Assembleias() {
     try {
       await base44.entities.Assembleia.update(assembleia.id, { status: newStatus });
       toast.success(`Assembleia ${newStatus === 'Em andamento' ? 'iniciada' : newStatus === 'Encerrada' ? 'encerrada' : 'atualizada'}`);
+      
+      // Send webhook notification for status change
+      if (newStatus === 'Cancelada') {
+        try {
+          await base44.functions.invoke('webhookAssembleiaManager', {
+            tenant_id: tenant.id,
+            assembleia_id: assembleia.id,
+            event_type: 'canceled'
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de assembleia:', webhookError);
+        }
+      }
+      
       loadAssembleias(tenant.id);
     } catch (error) {
       console.error('Error updating status:', error);
       toast.error('Erro ao atualizar status');
+    }
+  };
+
+  const handleDuplicateAssembleia = async (assembleia) => {
+    try {
+      // Find all existing copies to get the next number
+      const existingCopies = assembleias.filter(a => 
+        a.nome.startsWith(assembleia.nome) && a.nome.includes('Cópia')
+      );
+      const copyNumber = existingCopies.length + 1;
+      const newName = `${assembleia.nome} - Cópia ${copyNumber}`;
+
+      // Create new assembleia
+      const newAssembleia = await base44.entities.Assembleia.create({
+        tenant_id: assembleia.tenant_id,
+        nome: newName,
+        data_hora_inicio: assembleia.data_hora_inicio,
+        data_hora_fim: assembleia.data_hora_fim,
+        local: assembleia.local,
+        descricao: assembleia.descricao,
+        quorum_minimo: assembleia.quorum_minimo,
+        tipo_referendacao: assembleia.tipo_referendacao,
+        status: 'Agendada',
+        criado_por: user.id,
+        qr_code_checkin_token: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+      });
+
+      // Duplicate all votacoes from the original assembleia
+      const votacoes = await base44.entities.Votacao.filter({ assembleia_id: assembleia.id });
+      for (const votacao of votacoes) {
+        await base44.entities.Votacao.create({
+          assembleia_id: newAssembleia.id,
+          titulo: votacao.titulo,
+          descricao: votacao.descricao,
+          tipo_voto: votacao.tipo_voto,
+          voto_secreto: votacao.voto_secreto,
+          voto_qualificado: votacao.voto_qualificado,
+          opcoes: votacao.opcoes,
+          permite_abstencao: votacao.permite_abstencao,
+          quorum_minimo: votacao.quorum_minimo,
+          max_opcoes_multipla_escolha: votacao.max_opcoes_multipla_escolha,
+          status: 'Pendente',
+          criado_por: user.id
+        });
+      }
+
+      toast.success(`Assembleia duplicada com sucesso! ${votacoes.length} votação(ões) copiada(s).`);
+      loadAssembleias(tenant.id);
+    } catch (error) {
+      console.error('Error duplicating assembleia:', error);
+      toast.error('Erro ao duplicar assembleia');
     }
   };
 
@@ -295,6 +361,10 @@ export default function Assembleias() {
                                       <Edit className="w-4 h-4 mr-2" />
                                       Editar
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleDuplicateAssembleia(assembleia)}>
+                                      <Copy className="w-4 h-4 mr-2" />
+                                      Duplicar
+                                    </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem 
                                       onClick={() => handleStatusChange(assembleia, 'Cancelada')}
@@ -306,9 +376,21 @@ export default function Assembleias() {
                                   </>
                                 )}
                                 {assembleia.status === 'Em andamento' && (
-                                  <DropdownMenuItem onClick={() => handleStatusChange(assembleia, 'Encerrada')}>
-                                    <Square className="w-4 h-4 mr-2" />
-                                    Encerrar
+                                  <>
+                                    <DropdownMenuItem onClick={() => handleDuplicateAssembleia(assembleia)}>
+                                      <Copy className="w-4 h-4 mr-2" />
+                                      Duplicar
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleStatusChange(assembleia, 'Encerrada')}>
+                                      <Square className="w-4 h-4 mr-2" />
+                                      Encerrar
+                                    </DropdownMenuItem>
+                                  </>
+                                )}
+                                {['Encerrada', 'Cancelada'].includes(assembleia.status) && (
+                                  <DropdownMenuItem onClick={() => handleDuplicateAssembleia(assembleia)}>
+                                    <Copy className="w-4 h-4 mr-2" />
+                                    Duplicar
                                   </DropdownMenuItem>
                                 )}
                               </DropdownMenuContent>

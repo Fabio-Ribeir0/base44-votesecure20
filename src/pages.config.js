@@ -1,5 +1,4 @@
 import AssembleiaDetalhes from './pages/AssembleiaDetalhes';
-import Assembleias from './pages/Assembleias';
 import Checkin from './pages/Checkin';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
@@ -12,12 +11,12 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import Procuracoes from './pages/Procuracoes';
 import Usuarios from './pages/Usuarios';
 import VotacaoMembro from './pages/VotacaoMembro';
+import Assembleias from './pages/Assembleias';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AssembleiaDetalhes": AssembleiaDetalhes,
-    "Assembleias": Assembleias,
     "Checkin": Checkin,
     "Dashboard": Dashboard,
     "Home": Home,
@@ -30,6 +29,7 @@ export const PAGES = {
     "Procuracoes": Procuracoes,
     "Usuarios": Usuarios,
     "VotacaoMembro": VotacaoMembro,
+    "Assembleias": Assembleias,
 }
 
 export const pagesConfig = {
