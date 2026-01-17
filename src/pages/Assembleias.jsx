@@ -97,11 +97,14 @@ export default function Assembleias() {
     try {
       const data = await base44.entities.Assembleia.filter({ tenant_id: tenantId });
       
+      // Filter out canceled assemblies
+      const activeAssembleias = data.filter(a => a.status !== 'Cancelada');
+      
       // Load membros and checkins to calculate quorum
       const membros = await base44.entities.Membro.filter({ tenant_id: tenantId, ativo: true });
       
       // Enrich assembleia data with quorum info
-      const enrichedData = await Promise.all(data.map(async (assembleia) => {
+      const enrichedData = await Promise.all(activeAssembleias.map(async (assembleia) => {
         const checkins = await base44.entities.CheckIn.filter({ assembleia_id: assembleia.id });
         const presentCount = checkins.length;
         const quorumPercentage = membros.length > 0 ? Math.round((presentCount / membros.length) * 100) : 0;
@@ -122,7 +125,21 @@ export default function Assembleias() {
   const handleStatusChange = async (assembleia, newStatus) => {
     try {
       await base44.entities.Assembleia.update(assembleia.id, { status: newStatus });
-      toast.success(`Assembleia ${newStatus === 'Em andamento' ? 'iniciada' : newStatus === 'Encerrada' ? 'encerrada' : 'atualizada'}`);
+      
+      // Send webhook for canceled assemblies
+      if (newStatus === 'Cancelada') {
+        try {
+          await base44.functions.invoke('webhookAssembleiaManager', {
+            tenant_id: tenant.id,
+            assembleia_id: assembleia.id,
+            event_type: 'canceled'
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de assembleia:', webhookError);
+        }
+      }
+      
+      toast.success(`Assembleia ${newStatus === 'Em andamento' ? 'iniciada' : newStatus === 'Encerrada' ? 'encerrada' : newStatus === 'Cancelada' ? 'cancelada' : 'atualizada'}`);
       loadAssembleias(tenant.id);
     } catch (error) {
       console.error('Error updating status:', error);
