@@ -189,12 +189,20 @@ export default function VotacaoMembro() {
                   Sua conta está ativa. Nenhuma assembleia ativa ou identificada no momento. 
                   Aguarde convites para participar de assembleias e votações.
                 </p>
-                <Button 
+                /*<Button 
                   onClick={() => navigate(createPageUrl('Dashboard'))}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Conheça VoteSecure
+                </Button>*/
+
+                <Button 
+                  onClick={() => window.location.reload()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Verificar Assembleias
                 </Button>
+
               </CardContent>
             </Card>
           </motion.div>
