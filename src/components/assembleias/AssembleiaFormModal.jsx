@@ -105,6 +105,17 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
             tenantId, user
           );
         }
+
+        // Send webhook notification
+        try {
+          await base44.functions.invoke('webhookAssembleiaManager', {
+            tenant_id: tenantId,
+            assembleia_id: assembleia.id,
+            event_type: 'updated'
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de assembleia:', webhookError);
+        }
       } else {
         const newAssembleia = await base44.entities.Assembleia.create({
           ...data,
@@ -121,6 +132,17 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
             `Assembleia "${data.nome}" criada`,
             tenantId, user
           );
+        }
+
+        // Send webhook notification
+        try {
+          await base44.functions.invoke('webhookAssembleiaManager', {
+            tenant_id: tenantId,
+            assembleia_id: newAssembleia.id,
+            event_type: 'new'
+          });
+        } catch (webhookError) {
+          console.error('Erro ao enviar webhook de assembleia:', webhookError);
         }
       }
       onSuccess();
