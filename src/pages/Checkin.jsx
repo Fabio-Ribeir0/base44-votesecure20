@@ -80,7 +80,7 @@ export default function Checkin() {
       );
 
       console.log('Membros encontrados:', membrosEncontrados);
-      console.log('Membro encontrado pelo email:', user.email.trim(), m.email);
+      console.log('Membro encontrado pelo email:', membro);
 
       if (!membro) {
         setStatus('error');
