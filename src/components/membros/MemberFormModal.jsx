@@ -135,12 +135,8 @@ export default function MemberFormModal({ open, onOpenChange, member, tenantId, 
 
         // Send webhook notification for new member
         try {
-          await base44.functions.invoke('enviarWebhookN8N', {
-            event: 'members_added_batch',
+          await base44.functions.invoke('webhookMembrosAdicionados', {
             tenant_id: tenantId,
-            organization_name: tenantNome || '',
-            assembly_id: null,
-            assembly_name: null,
             members: [newMembro]
           });
         } catch (webhookError) {

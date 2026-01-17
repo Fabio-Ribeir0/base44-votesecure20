@@ -123,28 +123,6 @@ export default function Assembleias() {
     try {
       await base44.entities.Assembleia.update(assembleia.id, { status: newStatus });
       toast.success(`Assembleia ${newStatus === 'Em andamento' ? 'iniciada' : newStatus === 'Encerrada' ? 'encerrada' : 'atualizada'}`);
-      
-      // Send webhook for canceled assembly
-      if (newStatus === 'Cancelada') {
-        try {
-          const membros = await base44.entities.Membro.filter({ tenant_id: tenant.id, ativo: true });
-
-          await base44.functions.invoke('enviarWebhookN8N', {
-            event: 'canceled_assembly',
-            tenant_id: tenant.id,
-            organization_name: tenant.nome || '',
-            assembly_id: assembleia.id,
-            assembly_name: assembleia.nome,
-            assembly_datetime: assembleia.data_hora_inicio,
-            assembly_local: assembleia.local || '',
-            assembly_status: newStatus,
-            members: membros
-          });
-        } catch (webhookError) {
-          console.error('Erro ao enviar webhook de cancelamento:', webhookError);
-        }
-      }
-      
       loadAssembleias(tenant.id);
     } catch (error) {
       console.error('Error updating status:', error);
