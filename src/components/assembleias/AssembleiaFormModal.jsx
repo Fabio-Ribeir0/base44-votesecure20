@@ -134,7 +134,7 @@ export default function AssembleiaFormModal({ open, onOpenChange, assembleia, te
           event: assembleia ? 'updated_assembly' : 'new_assembly',
           tenant_id: tenantId,
           organization_name: tenant[0]?.nome || '',
-          assembleia_id: assembleia ? assembleia.id : result.id,
+          assembly_id: assembleia ? assembleia.id : result.id,
           assembly_name: data.nome,
           assembly_datetime: data.data_hora_inicio,
           assembly_local: data.local || '',

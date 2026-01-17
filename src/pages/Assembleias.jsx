@@ -128,12 +128,12 @@ export default function Assembleias() {
       if (newStatus === 'Cancelada') {
         try {
           const membros = await base44.entities.Membro.filter({ tenant_id: tenant.id, ativo: true });
-          
+
           await base44.functions.invoke('enviarWebhookN8N', {
             event: 'canceled_assembly',
             tenant_id: tenant.id,
-            organization_name: tenant.nome,
-            assembleia_id: assembleia.id,
+            organization_name: tenant.nome || '',
+            assembly_id: assembleia.id,
             assembly_name: assembleia.nome,
             assembly_datetime: assembleia.data_hora_inicio,
             assembly_local: assembleia.local || '',

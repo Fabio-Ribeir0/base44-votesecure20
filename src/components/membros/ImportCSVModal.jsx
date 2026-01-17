@@ -101,9 +101,14 @@ export default function ImportCSVModal({ open, onOpenChange, tenantId, onSuccess
       // Send webhook notification for imported members
       if (createdMembers.length > 0) {
         try {
+          const tenant = await base44.entities.Tenant.filter({ id: tenantId });
+          
           await base44.functions.invoke('enviarWebhookN8N', {
             event: 'members_added_batch',
             tenant_id: tenantId,
+            organization_name: tenant[0]?.nome || '',
+            assembly_id: null,
+            assembly_name: null,
             members: createdMembers
           });
         } catch (webhookError) {

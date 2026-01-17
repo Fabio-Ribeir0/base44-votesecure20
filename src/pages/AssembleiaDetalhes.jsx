@@ -241,12 +241,12 @@ export default function AssembleiaDetalhes() {
         try {
           const baseUrl = window.location.origin;
           const magicLink = `${baseUrl}/VotacaoMembro?assembleia_id=${assembleia.id}`;
-          
+
           await base44.functions.invoke('enviarWebhookN8N', {
             event: 'checkin_confirmed_batch',
             tenant_id: tenant.id,
-            organization_name: tenant.nome,
-            assembleia_id: assembleia.id,
+            organization_name: tenant.nome || '',
+            assembly_id: assembleia.id,
             assembly_name: assembleia.nome,
             members: checkedInMembers.map(m => ({ ...m, url: magicLink }))
           });
