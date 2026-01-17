@@ -9,17 +9,23 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { tenant_id, assembleia_id, members } = await req.json();
+    const { tenant_id, assembleia_id, event_type } = await req.json();
 
-    if (!tenant_id || !assembleia_id || !members || !Array.isArray(members) || members.length === 0) {
+    if (!tenant_id || !assembleia_id || !event_type) {
       return Response.json({ 
-        error: 'Dados obrigatórios: tenant_id, assembleia_id, members (array)' 
+        error: 'Dados obrigatórios: tenant_id, assembleia_id, event_type' 
       }, { status: 400 });
     }
 
-    const webhookUrl = Deno.env.get("N8N_CHECKIN_MEMBERS_URL");
+    if (!['new', 'updated', 'canceled'].includes(event_type)) {
+      return Response.json({ 
+        error: 'event_type deve ser: new, updated ou canceled' 
+      }, { status: 400 });
+    }
+
+    const webhookUrl = Deno.env.get("N8N_ASSEMBLY_MANAGER_URL");
     if (!webhookUrl) {
-      console.error('N8N_CHECKIN_MEMBERS_URL não configurada');
+      console.error('N8N_ASSEMBLY_MANAGER_URL não configurada');
       return Response.json({ 
         success: false,
         error: 'Webhook URL não configurada' 
@@ -44,6 +50,12 @@ Deno.serve(async (req) => {
     }
     const assembleia = assembleias[0];
 
+    // Get all members from organization
+    const members = await base44.asServiceRole.entities.Membro.filter({ 
+      tenant_id: tenant_id,
+      ativo: true
+    });
+
     // Normalize telephone with +55
     const normalizeTelephone = (phone) => {
       if (!phone) return '';
@@ -51,28 +63,47 @@ Deno.serve(async (req) => {
       return cleaned.startsWith('55') ? `+${cleaned}` : `+55${cleaned}`;
     };
 
-    // Generate magic link for voting
-    const baseUrl = 'https://votesecure.minimind.com.br';
-    const magicLink = `${baseUrl}/VotacaoMembro?assembleia_id=${assembleia.id}`;
+    // Format date to Portuguese extended format
+    const formatDateExtended = (dateStr) => {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      return `${date.getDate()} de ${months[date.getMonth()]} de ${date.getFullYear()}`;
+    };
+
+    // Format time to 24h format
+    const formatTime24h = (dateStr) => {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+    };
 
     // Prepare webhook payload
     const payload = {
-      event: "checkin_confirmed_batch",
+      event: event_type,
       organization_id: tenant.id,
       organization_name: tenant.nome,
       assembly_id: assembleia.id,
       assembly_name: assembleia.nome,
+      assembly_date: formatDateExtended(assembleia.data_hora_inicio),
+      assembly_time: formatTime24h(assembleia.data_hora_inicio),
+      assembly_local: assembleia.local || '',
+      assembly_status: assembleia.status,
       members: members.map(m => ({
         id: m.id,
         name: m.nome_completo,
         email: m.email || '',
         telephone: normalizeTelephone(m.telefone),
-        role: m.tipo_membro || 'Proprietário',
-        url: magicLink
+        role: m.tipo_membro || 'Proprietário'
       }))
     };
 
-    console.log(`Enviando webhook para ${webhookUrl} com ${members.length} membro(s)`);
+    console.log(`Enviando webhook para ${webhookUrl} - Evento: ${event_type}`);
 
     // Send webhook
     const response = await fetch(webhookUrl, {
@@ -98,11 +129,12 @@ Deno.serve(async (req) => {
     return Response.json({ 
       success: true,
       message: 'Webhook enviado com sucesso',
+      event: event_type,
       members_count: members.length
     });
 
   } catch (error) {
-    console.error('Erro na função webhookCheckinConfirmado:', error);
+    console.error('Erro na função webhookAssembleiaManager:', error);
     return Response.json({ 
       error: error.message || 'Erro interno do servidor' 
     }, { status: 500 });

@@ -17,9 +17,9 @@ Deno.serve(async (req) => {
       }, { status: 400 });
     }
 
-    const webhookUrl = Deno.env.get("N8N_MEMBER_ADD_URL");
+    const webhookUrl = Deno.env.get("N8N_TENANT_MEMBERS_URL");
     if (!webhookUrl) {
-      console.error('N8N_MEMBER_ADD_URL não configurada');
+      console.error('N8N_TENANT_MEMBERS_URL não configurada');
       return Response.json({ 
         success: false,
         error: 'Webhook URL não configurada' 
@@ -35,6 +35,13 @@ Deno.serve(async (req) => {
     }
     const tenant = tenants[0];
 
+    // Normalize telephone with +55
+    const normalizeTelephone = (phone) => {
+      if (!phone) return '';
+      const cleaned = phone.replace(/\D/g, '');
+      return cleaned.startsWith('55') ? `+${cleaned}` : `+55${cleaned}`;
+    };
+
     // Prepare webhook payload
     const payload = {
       event: "members_added_batch",
@@ -44,7 +51,7 @@ Deno.serve(async (req) => {
         id: m.id,
         name: m.nome_completo,
         email: m.email || '',
-        telephone: m.telefone,
+        telephone: normalizeTelephone(m.telefone),
         role: m.tipo_membro || 'Proprietário'
       }))
     };
