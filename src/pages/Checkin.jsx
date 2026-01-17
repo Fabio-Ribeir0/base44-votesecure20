@@ -79,6 +79,9 @@ export default function Checkin() {
         m.email && m.email.trim().toLowerCase() === user.email.trim().toLowerCase()
       );
 
+      console.log('Membros encontrados:', membrosEncontrados);
+      console.log('Membro encontrado pelo email:', user.email.trim(), m.email);
+
       if (!membro) {
         setStatus('error');
         setMessage('Seu cadastro de membro não foi encontrado para esta assembleia. Verifique se o e-mail cadastrado corresponde ao seu e-mail de login ou entre em contato com o administrador.');
