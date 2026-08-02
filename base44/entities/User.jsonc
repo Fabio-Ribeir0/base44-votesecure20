@@ -1,0 +1,40 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "telefone": {
+      "type": "string",
+      "description": "Telefone do usu\u00e1rio"
+    },
+    "tenant_id": {
+      "type": "string",
+      "description": "ID do tenant ao qual o usu\u00e1rio pertence"
+    },
+    "perfil_tenant": {
+      "type": "string",
+      "enum": [
+        "Administrador",
+        "Presidente",
+        "Secret\u00e1rio",
+        "Observador",
+        "Membro Votante"
+      ],
+      "default": "Membro Votante",
+      "description": "Perfil do usu\u00e1rio no tenant"
+    },
+    "ativo": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se o usu\u00e1rio est\u00e1 ativo"
+    },
+    "consente_dados": {
+      "type": "boolean",
+      "default": true,
+      "description": "Consentimento para uso de dados (LGPD)"
+    }
+  },
+  "required": [
+    "telefone",
+    "tenant_id"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Membro",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "ID do tenant"
+    },
+    "nome_completo": {
+      "type": "string",
+      "description": "Nome completo do membro"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email do membro"
+    },
+    "telefone": {
+      "type": "string",
+      "description": "Telefone do membro (obrigat\u00f3rio para WhatsApp)"
+    },
+    "documento": {
+      "type": "string",
+      "description": "CPF ou identidade (criptografado)"
+    },
+    "endereco": {
+      "type": "string",
+      "description": "Endere\u00e7o do membro"
+    },
+    "tipo_membro": {
+      "type": "string",
+      "enum": [
+        "Propriet\u00e1rio",
+        "Inquilino",
+        "Representante",
+        "Outro"
+      ],
+      "default": "Propriet\u00e1rio",
+      "description": "Tipo do membro"
+    },
+    "peso_voto": {
+      "type": "number",
+      "default": 1,
+      "description": "Peso do voto para vota\u00e7\u00f5es qualificadas"
+    },
+    "ativo": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se o membro est\u00e1 ativo"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "nome_completo",
+    "telefone"
+  ]
+}

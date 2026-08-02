@@ -1,0 +1,54 @@
+{
+  "name": "Plano",
+  "type": "object",
+  "properties": {
+    "nome": {
+      "type": "string",
+      "description": "Nome do plano (B\u00e1sico, Padr\u00e3o, Avan\u00e7ado, Premium)"
+    },
+    "preco_mensal": {
+      "type": "number",
+      "description": "Pre\u00e7o mensal do plano em reais"
+    },
+    "limite_assembleias_mes": {
+      "type": "number",
+      "description": "Limite de assembleias por m\u00eas (-1 para ilimitado)"
+    },
+    "limite_membros": {
+      "type": "number",
+      "description": "Limite de membros (-1 para ilimitado)"
+    },
+    "limite_votacoes_assembleia": {
+      "type": "number",
+      "description": "Limite de vota\u00e7\u00f5es por assembleia (-1 para ilimitado)"
+    },
+    "permite_whatsapp": {
+      "type": "boolean",
+      "description": "Permite integra\u00e7\u00e3o com WhatsApp"
+    },
+    "permite_voto_secreto": {
+      "type": "boolean",
+      "description": "Permite vota\u00e7\u00e3o secreta"
+    },
+    "permite_voto_qualificado": {
+      "type": "boolean",
+      "description": "Permite voto qualificado (com peso)"
+    },
+    "permite_procuracao_certificado": {
+      "type": "boolean",
+      "description": "Permite procura\u00e7\u00e3o com certificado digital"
+    },
+    "stripe_price_id": {
+      "type": "string",
+      "description": "ID do pre\u00e7o no Stripe"
+    },
+    "ordem": {
+      "type": "number",
+      "description": "Ordem de exibi\u00e7\u00e3o do plano"
+    }
+  },
+  "required": [
+    "nome",
+    "preco_mensal"
+  ]
+}

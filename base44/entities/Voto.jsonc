@@ -1,0 +1,52 @@
+{
+  "name": "Voto",
+  "type": "object",
+  "properties": {
+    "votacao_id": {
+      "type": "string",
+      "description": "ID da vota\u00e7\u00e3o"
+    },
+    "membro_id": {
+      "type": "string",
+      "description": "ID do membro votante"
+    },
+    "opcao_escolhida": {
+      "type": "string",
+      "description": "Op\u00e7\u00e3o escolhida (para voto n\u00e3o-secreto)"
+    },
+    "opcoes_escolhidas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Op\u00e7\u00f5es escolhidas (para m\u00faltipla escolha)"
+    },
+    "peso_voto": {
+      "type": "number",
+      "default": 1,
+      "description": "Peso do voto aplicado"
+    },
+    "abstencao": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se foi absten\u00e7\u00e3o"
+    },
+    "por_procuracao": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se votou via procura\u00e7\u00e3o"
+    },
+    "procurador_id": {
+      "type": "string",
+      "description": "ID do procurador (se por procura\u00e7\u00e3o)"
+    },
+    "hash_voto": {
+      "type": "string",
+      "description": "Hash para auditoria (voto secreto)"
+    }
+  },
+  "required": [
+    "votacao_id",
+    "membro_id"
+  ]
+}

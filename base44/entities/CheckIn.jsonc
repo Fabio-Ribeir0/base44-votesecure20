@@ -1,0 +1,38 @@
+{
+  "name": "CheckIn",
+  "type": "object",
+  "properties": {
+    "assembleia_id": {
+      "type": "string",
+      "description": "ID da assembleia"
+    },
+    "membro_id": {
+      "type": "string",
+      "description": "ID do membro"
+    },
+    "data_hora": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora do check-in"
+    },
+    "metodo": {
+      "type": "string",
+      "enum": [
+        "QR Code",
+        "Manual",
+        "Link WhatsApp"
+      ],
+      "description": "M\u00e9todo de check-in"
+    },
+    "realizado_por": {
+      "type": "string",
+      "description": "ID do usu\u00e1rio que realizou o check-in manual"
+    }
+  },
+  "required": [
+    "assembleia_id",
+    "membro_id",
+    "data_hora",
+    "metodo"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "name": "Assembleia",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "ID do tenant"
+    },
+    "nome": {
+      "type": "string",
+      "description": "Nome da assembleia"
+    },
+    "data_hora_inicio": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora de in\u00edcio"
+    },
+    "data_hora_fim": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora de t\u00e9rmino"
+    },
+    "local": {
+      "type": "string",
+      "description": "Local da assembleia"
+    },
+    "descricao": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o da assembleia"
+    },
+    "quorum_minimo": {
+      "type": "number",
+      "default": 0,
+      "description": "Qu\u00f3rum m\u00ednimo em porcentagem"
+    },
+    "tipo_referendacao": {
+      "type": "string",
+      "enum": [
+        "Autom\u00e1tica",
+        "Presidente",
+        "Secret\u00e1rio"
+      ],
+      "default": "Autom\u00e1tica",
+      "description": "Tipo de referenda\u00e7\u00e3o"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Agendada",
+        "Em andamento",
+        "Encerrada",
+        "Cancelada"
+      ],
+      "default": "Agendada",
+      "description": "Status da assembleia"
+    },
+    "qr_code_checkin_token": {
+      "type": "string",
+      "description": "Token \u00fanico para check-in via QR Code"
+    },
+    "criado_por": {
+      "type": "string",
+      "description": "ID do usu\u00e1rio que criou"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "nome",
+    "data_hora_inicio"
+  ]
+}

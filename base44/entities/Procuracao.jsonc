@@ -1,0 +1,64 @@
+{
+  "name": "Procuracao",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "ID do tenant"
+    },
+    "assembleia_id": {
+      "type": "string",
+      "description": "ID da assembleia (espec\u00edfica ou geral)"
+    },
+    "outorgante_id": {
+      "type": "string",
+      "description": "ID do membro que concede a procura\u00e7\u00e3o"
+    },
+    "procurador_id": {
+      "type": "string",
+      "description": "ID do membro procurador"
+    },
+    "data_inicio": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data de in\u00edcio da validade"
+    },
+    "data_fim": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data de fim da validade"
+    },
+    "tipo": {
+      "type": "string",
+      "enum": [
+        "Simples",
+        "Com Certificado Digital"
+      ],
+      "default": "Simples",
+      "description": "Tipo da procura\u00e7\u00e3o"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Ativa",
+        "Revogada",
+        "Expirada"
+      ],
+      "default": "Ativa",
+      "description": "Status da procura\u00e7\u00e3o"
+    },
+    "documento_url": {
+      "type": "string",
+      "description": "URL do documento de procura\u00e7\u00e3o"
+    },
+    "observacoes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es adicionais"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "outorgante_id",
+    "procurador_id"
+  ]
+}

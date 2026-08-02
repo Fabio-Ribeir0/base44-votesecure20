@@ -1,0 +1,87 @@
+{
+  "name": "Votacao",
+  "type": "object",
+  "properties": {
+    "assembleia_id": {
+      "type": "string",
+      "description": "ID da assembleia"
+    },
+    "titulo": {
+      "type": "string",
+      "description": "T\u00edtulo da vota\u00e7\u00e3o"
+    },
+    "descricao": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o detalhada da vota\u00e7\u00e3o"
+    },
+    "tipo_voto": {
+      "type": "string",
+      "enum": [
+        "Escolha \u00danica",
+        "M\u00faltipla Escolha"
+      ],
+      "default": "Escolha \u00danica",
+      "description": "Tipo de vota\u00e7\u00e3o"
+    },
+    "voto_secreto": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se a vota\u00e7\u00e3o \u00e9 secreta"
+    },
+    "voto_qualificado": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se usa peso de voto"
+    },
+    "opcoes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Op\u00e7\u00f5es de voto"
+    },
+    "permite_abstencao": {
+      "type": "boolean",
+      "default": true,
+      "description": "Permite absten\u00e7\u00e3o"
+    },
+    "quorum_minimo": {
+      "type": "number",
+      "description": "Qu\u00f3rum m\u00ednimo da vota\u00e7\u00e3o em porcentagem (se n\u00e3o definido, usa o da assembleia)"
+    },
+    "max_opcoes_multipla_escolha": {
+      "type": "number",
+      "description": "M\u00e1ximo de op\u00e7\u00f5es que podem ser selecionadas em m\u00faltipla escolha"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Aberta",
+        "Encerrada",
+        "Cancelada"
+      ],
+      "default": "Pendente",
+      "description": "Status da vota\u00e7\u00e3o"
+    },
+    "data_abertura": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora de abertura"
+    },
+    "data_encerramento": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora de encerramento"
+    },
+    "criado_por": {
+      "type": "string",
+      "description": "ID do usu\u00e1rio que criou"
+    }
+  },
+  "required": [
+    "assembleia_id",
+    "titulo",
+    "opcoes"
+  ]
+}
